@@ -1,3 +1,7 @@
+import * as posenet from '@tensorflow-models/posenet';
+const net = await posenet.load();
+
+
 function process(data, canvas) {
     console.log('processing: ', data);
     console.log("process: ", data.getVideoTracks());
@@ -13,9 +17,7 @@ function process(data, canvas) {
     })
     .catch(err => console.error('takePhoto() failed: ', err));
     console.log("here");
-    // console.log("Took photo: ", photoBlob);
 }
 
 export { process }
-
 
