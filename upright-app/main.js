@@ -11,7 +11,7 @@ const {
 const Datastore = require('nedb');
 
 const db = new Datastore({
-	filename: 'local/defaults'
+	filename: 'local/defaults.db'
 });
 
 function loadMenuBar() {
@@ -54,10 +54,27 @@ function loadOnboarding() {
 	mainWindow.loadURL('file://' + __dirname + '/src/views/onboarding.html');
 
 	ipcMain.on('onboarding-completed', (event, arg) => {
-		console.log('completed!');
+		const doc = {
+			onboarded: true
+		}
+		db.insert(doc);
+	});
+}
+
+function resetOnboarding() {
+	db.update({ onboarded: true}, { onboarded: false}, function (err, numReplaced) {
+		console.log('Deleted ', numReplaced, ' onboarding files.');
 	});
 }
 
 app.on('ready', function () {
-	loadMenuBar();
+	db.loadDatabase();
+	db.find({ onboarded: true}, function(err, docs) {
+		if (docs.length > 0) {
+			loadMenuBar();
+			resetOnboarding();
+		} else {
+			loadOnboarding();
+		}
+	})
 });
