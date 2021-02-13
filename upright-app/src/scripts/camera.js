@@ -1,4 +1,4 @@
-import { process } from './process.js';
+import { process, writeToFile } from './process.js';
 
 var canvas = document.querySelector('canvas');
 
@@ -11,6 +11,10 @@ navigator.mediaDevices.getUserMedia({video: true})
 	document.getElementById("takePhoto").addEventListener("click", ()=>{
 		process(stream, canvas);
 	});
+    document.getElementById("save").addEventListener("click", () => {
+        writeToFile(document, window);
+    });
+
 
   }).catch(function() {
     alert('could not connect stream');
