@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register for Upright</title>
+    <link rel="stylesheet" href="../styles/starter.css">
+    <link rel="stylesheet" href="../styles/registration.css">
+</head>
+
+<body>
+    <div class="Registration app">
+        <div class="Registration-container">
+            <h1 class="Registration-title" id="title">Sign Up for Upright</h1>
+            <h2 class="Registration-subtitle" id="subtitle">Fill out the fields below to create your Upright account.
+            </h2>
+            <button class="inline-button Registration-question">Why do I need to create an account?</button>
+
+            <form class="Registration-form">
+                <div class="Registration-row" id="row-1">
+                    <div class="Registration-inputBox">
+                        <label for="firstName">First Name</label>
+                        <input name="firstName" id="firstName" class="Registration-inputTextField">
+                    </div>
+
+                    <div class="Registration-inputBox">
+                        <label for="lastName">Last Name</label>
+                        <input name="lastName" id="lastName" class="Registration-inputTextField">
+                    </div>
+                </div>
+
+                <div class="Registration-row" id="row-2">
+                    <div class="Registration-inputBox">
+                        <label for="email">Email</label>
+                        <input name="email" id="email" class="Registration-inputTextField">
+                    </div>
+
+                    <div class="Registration-inputBox">
+                        <label for="password">Password</label>
+                        <input name="password" id="password" type="password" class="Registration-inputTextField">
+                    </div>
+                </div>
+
+                <div class="Registration-row" id="row-3">
+                    <div class="Registration-inputBox">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input name="confirmPassword" id="confirmPassword" type="password"
+                            class="Registration-inputTextField">
+                    </div>
+                </div>
+
+                <button class="cta Registration-cta" type="button" id="cta">Sign Up</button>
+                <button class="inline-button Registration-switch" id="switch-type" type="button">Already have an
+                    account? Log
+                    In</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-firestore.js"></script>
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOiCmoUqaqOJYddH8JiDxxHR8QnjZAURc",
+            authDomain: "upright-th21.firebaseapp.com",
+            projectId: "upright-th21",
+            storageBucket: "upright-th21.appspot.com",
+            messagingSenderId: "52564962928",
+            appId: "1:52564962928:web:1724b0fa750a7f04cfceb5",
+            measurementId: "G-EMF7VN18XJ"
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+    <script type="module" src="../scripts/registration.js"></script>
+</body>
+
+</html>
