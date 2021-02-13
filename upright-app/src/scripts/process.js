@@ -6,6 +6,7 @@ let filename = "poseData.json";
 let id = 0;
 let keypointIndices = [0, 1, 2, 5, 6];
 
+let baseline = null;
 var latestimg;
 
 async function startup() {
@@ -35,7 +36,11 @@ async function estimate(image) {
 	console.log("slouch index:")
 	console.log(shoulder - nose)
 
-	if(shoulder - nose < .4){
+	if(baseline === null){
+		baseline = shoulder - nose;
+	}
+
+	if(shoulder - nose > baseline*1.1 || shoulder - nose < baseline*0.9){
 		console.log("you're slouching")
 	}
 
