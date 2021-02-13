@@ -9,7 +9,11 @@ navigator.mediaDevices.getUserMedia({video: true})
     }
     document.getElementById('camera').srcObject = stream;
 	document.getElementById("takePhoto").addEventListener("click", ()=>{
-		process(stream, canvas);
+		//process(stream, canvas);
+		setInterval(() => {
+			process(stream, canvas)
+		}, 5000);
+
 	});
     document.getElementById("save").addEventListener("click", () => {
         writeToFile(document, window);
