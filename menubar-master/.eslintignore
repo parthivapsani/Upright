@@ -1,0 +1,5 @@
+.eslintrc.js
+**/coverage/*
+**/examples/*
+**/lib/*
+**/node_modules/*

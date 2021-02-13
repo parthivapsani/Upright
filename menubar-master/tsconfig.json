@@ -1,0 +1,9 @@
+{
+  "extends": "./node_modules/@amaurymartiny/tsconfig/tsconfig",
+  "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
+    "outDir": "./lib",
+    "target": "es5"
+  }
+}
