@@ -1,0 +1,55 @@
+html, body, video {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+video {
+    display: block;
+}
+
+.hidden {
+    display: none;
+  }
+  
+  button {
+    margin: 0 10px 20px 0;
+    width: 99px;
+  }
+  
+  button:last-of-type {
+    margin: 0;
+  }
+  
+  canvas {
+    display: block;
+    margin: 0 0 20px 0;
+  }
+  
+  img {
+    display: block;
+    margin: 0 0 20px 0;
+  }
+  
+  input#zoom {
+    margin: 0 0 20px 0;
+    width: 100%;
+  }
+  
+  .borderBelow {
+    margin: 0 0 20px 0;
+    padding: 0 0 20px 0;
+  }
+  
+  @media (max-width: 500px) {
+    button {
+      font-size: 0.8em;
+      width: calc(33% - 5px);
+    }
+  }
+  
+  @media (max-width: 720px) {
+    video {
+      margin: 0 10px 10px 0;
+    }
+  }

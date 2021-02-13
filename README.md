@@ -8,7 +8,7 @@ Inside the `upright-app` directory, run:
 
 Note you may need to run
 
-    npm install --foce
+    npm install --force
     
 If your versions of electron and menubar don't match the package.json.
 

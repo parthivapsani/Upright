@@ -4,43 +4,60 @@ const {
 
 const {
 	app,
-	BrowserWindow
+	BrowserWindow,
+	ipcMain
 } = require('electron');
 
-app.on('ready', function () {
+const Datastore = require('nedb');
+
+const db = new Datastore({
+	filename: 'local/defaults'
+});
+
+function loadMenuBar() {
 	var mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
-    show: false,    
+		show: false,
 		webPreferences: {
 			nodeIntegration: true
 		}
 	});
 
-	// and load the index.html of the app.
-	mainWindow.loadURL('file://' + __dirname + '/index.html');
+	mainWindow.loadURL('file://' + __dirname + '/views/index.html');
 
-	// Emitted when the window is closed.
 	mainWindow.on('closed', function () {
-		// Dereference the window object, usually you would store windows
-		// in an array if your app supports multi windows, this is the time
-		// when you should delete the corresponding element.
 		mainWindow = null;
 	});
 
 	const mb = menubar({
 		browserWindow: mainWindow,
-    preloadWindow: true
+		preloadWindow: true
 	});
 
 	mb.on('ready', () => {
 		console.log('Running menu bar');
-		// Create the browser window.
-
 	});
 
 	mb.on('window-all-closed', function () {
 		if (process.platform != 'darwin')
 			mb.quit();
 	});
-})
+}
+
+function loadOnboarding() {
+	var mainWindow = new BrowserWindow({
+		webPreferences: {
+			nodeIntegration: true
+		}
+	});
+	mainWindow.loadURL('file://' + __dirname + '/src/views/onboarding.html');
+
+	ipcMain.on('onboarding-completed', (event, arg) => {
+		console.log('completed!');
+	});
+}
+
+app.on('ready', function () {
+	loadMenuBar();
+});
