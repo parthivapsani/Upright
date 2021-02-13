@@ -42,6 +42,7 @@ span,
 button,
 a {
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -50,7 +51,8 @@ button {
     cursor: pointer;
 }
 
-button:focus {
+button:focus,
+input:focus {
     outline: none;
 }
 
@@ -67,4 +69,26 @@ button:focus {
 
 .cta:hover {
     background: #00A28D;
+}
+
+.inline-button {
+    color: #00BFA6;
+    font-weight: 600;
+    opacity: 0.7;
+    background: none;
+    transition: all 0.3s;
+}
+
+.inline-button:hover {
+    color: #00A28D;
+    opacity: 1;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    height: 100%;
 }

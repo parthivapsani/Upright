@@ -1,12 +1,3 @@
-.Landing {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px;
-    height: 100%;
-}
-
 .Landing-title {
     font-size: 48px;
     color: #00BFA6;
@@ -103,4 +94,8 @@
 
 .Landing-cta {
     margin-top: 32px;
+}
+
+.Landing-privacyLink {
+    margin-top: 16px;
 }
