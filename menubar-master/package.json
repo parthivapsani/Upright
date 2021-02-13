@@ -42,7 +42,8 @@
   },
   "types": "lib/index.d.ts",
   "dependencies": {
-    "electron-positioner": "^4.1.0"
+    "electron-positioner": "^4.1.0",
+    "menubar": "^9.0.2"
   },
   "devDependencies": {
     "@amaurymartiny/config": "^1.3.0",

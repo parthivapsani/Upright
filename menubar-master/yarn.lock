@@ -3854,6 +3854,13 @@ marked@1.0.0:
   resolved "https://registry.yarnpkg.com/marked/-/marked-1.0.0.tgz#d35784245a04871e5988a491e28867362e941693"
   integrity sha512-Wo+L1pWTVibfrSr+TTtMuiMfNzmZWiOPeO7rZsQUY5bgsxpHesBEcIWJloWVTFnrMXnf/TL30eTFSGJddmQAng==
 
+menubar@^9.0.2:
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/menubar/-/menubar-9.0.2.tgz#d0850105c59ede14ee6150561a0147fd4be6f74f"
+  integrity sha512-/AN0h1z82qc9d0LYOI5lRnUSm/TAZPOQrjdR3LREbYs63BZcxUDbzi9h0iwckovDY6nJDdmjL0WRo6SeyyMT5A==
+  dependencies:
+    electron-positioner "^4.1.0"
+
 meow@^3.3.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/meow/-/meow-3.7.0.tgz#72cb668b425228290abbfa856892587308a801fb"
