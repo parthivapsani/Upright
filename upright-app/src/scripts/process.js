@@ -1,5 +1,3 @@
-//const posenet = require('@tensorflow-models/posenet');
-console.log(posenet);
 let net;
 let jsonData = {};
 let filename = "poseData.json";
@@ -7,7 +5,8 @@ let id = 0;
 let keypointIndices = [0, 1, 2, 5, 6];
 
 let baseline = null;
-var latestimg;
+let shoulderbase = null;
+let latestimg;
 
 async function startup() {
 	net = await posenet.load();
@@ -29,22 +28,24 @@ async function estimate(image) {
 
 	let nose = pose["keypoints"][0]["position"]["y"]
 	let shoulder = (pose["keypoints"][5]["position"]["y"] + pose["keypoints"][6]["position"]["y"])/2
+    let shoulderWidth = (pose["keypoints"][5]["position"]["x"] - pose["keypoints"][6]["position"]["x"])
+    let metric = shoulder - nose;
+	// nose = nose / 480;
+	// shoulder = shoulder / 480;
 
-	nose = nose/480;
-	shoulder = shoulder/480;
-
-	console.log("slouch index:")
-	console.log(shoulder - nose)
 
 	if(baseline === null){
-		baseline = shoulder - nose;
+		baseline = metric;
+        shoulderbase = shoulderWidth;
 	}
 
-	if(shoulder - nose > baseline*1.1 || shoulder - nose < baseline*0.9){
+	console.log("slouch index:");
+    console.log(baseline - metric);
+    console.log(shoulderbase - shoulderWidth);
+
+	if(shoulder - nose > baseline * 1.1 || shoulder - nose < baseline*0.9){
 		console.log("you're slouching")
 	}
-
-
 }
 
 function process(data, canvas) {
@@ -57,8 +58,8 @@ function process(data, canvas) {
         //console.log(canvas);
         //canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
 		estimate(imageBitmap);
-		latestimg = imageBitmap;
-		estimate(latestimg)
+		// latestimg = imageBitmap;
+		// estimate(latestimg)
     })
     .catch(err => console.error('takePhoto() failed: ', err));
 

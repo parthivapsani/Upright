@@ -12,7 +12,7 @@ navigator.mediaDevices.getUserMedia({video: true})
 		//process(stream, canvas);
 		setInterval(() => {
 			process(stream, canvas)
-		}, 5000);
+		}, 3500);
 
 	});
     document.getElementById("save").addEventListener("click", () => {
