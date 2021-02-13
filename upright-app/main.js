@@ -86,7 +86,6 @@ function resetOnboarding() {
 
 app.on('ready', function () {
 	db.loadDatabase();
-	resetOnboarding(); // For testing
 	db.find({
 		onboarded: true
 	}, function (err, docs) {

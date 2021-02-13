@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "firebase": "^8.2.7",
+    "@tensorflow-models/posenet": "^2.2.1",
     "menubar": "^9.0.2",
     "nedb": "^1.8.0"
   }
