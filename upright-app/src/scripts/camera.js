@@ -8,7 +8,9 @@ navigator.mediaDevices.getUserMedia({video: true})
         throw new Error("Device does not have webcam");
     }
     document.getElementById('camera').srcObject = stream;
-    process(stream, canvas);
+	document.getElementById("takePhoto").addEventListener("click", ()=>{
+		process(stream, canvas);
+	});
 
   }).catch(function() {
     alert('could not connect stream');
