@@ -24,7 +24,7 @@ function loadMenuBar() {
 		}
 	});
 
-	mainWindow.loadURL('file://' + __dirname + '/index.html');
+	mainWindow.loadURL('file://' + __dirname + '/views/index.html');
 
 	mainWindow.on('closed', function () {
 		mainWindow = null;
