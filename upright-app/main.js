@@ -60,11 +60,9 @@ function loadOnboarding() {
 		loadRegistration(mainWindow);
 	});
 
-	ipcMain.on('onboarding-completed', (event, arg) => {
-		const doc = {
-			onboarded: true
-		}
-		db.insert(doc);
+	ipcMain.on('registered', (event, userData) => {
+		userData['onboarded'] = true;
+		db.insert(userData);
 		loadMenuBar();
 		mainWindow.destroy();
 	});

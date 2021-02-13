@@ -1,0 +1,74 @@
+.Registration-container {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.Registration-title {
+    font-size: 28px;
+    color: #00BFA6;
+}
+
+.Registration-subtitle {
+    opacity: 0.7;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.Registration-question {
+    margin-top: 8px;
+}
+
+.Registration-row {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.Registration-form {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.Registration-row {
+    display: flex;
+    width: 100%;
+}
+
+.Registration-inputBox {
+    margin-right: 32px;
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+}
+
+.Registration-inputTextField {
+    font-family: 'Poppins', sans-serif;
+    padding: 0 16px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    transition: all 0.3s;
+    height: 36px;
+    margin-top: 4px;
+}
+
+.Registration-inputTextField:hover {
+    border-color: #00BFA6;
+}
+
+.Registration-input:last-child {
+    margin-right: 0;
+}
+
+.Registration-cta {
+    margin-top: 32px;
+    width: 175px;
+}
+
+.Registration-switch {
+    align-self: flex-start;
+    margin-top: 16px;
+}

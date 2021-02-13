@@ -1,9 +1,15 @@
+const {
+    ipcRenderer
+} = require('electron');
+
 const indicator1 = document.querySelector("#indicator-1");
 const indicator2 = document.querySelector("#indicator-2");
 const indicator3 = document.querySelector("#indicator-3");
 const leftArrow = document.querySelector("#left-arrow");
 const rightArrow = document.querySelector("#right-arrow");
 const leftItem = document.querySelector('#item-1');
+const cta = document.querySelector('#landing-next');
+
 const activeClass = 'Landing-indicatorActive';
 
 var currentIndicator = 0;
@@ -42,4 +48,8 @@ leftArrow.addEventListener('click', function() {
 rightArrow.addEventListener('click', function() {
     currentIndicator = currentIndicator < 2 ? currentIndicator + 1 : 2;
     updateActiveIndicator();
+});
+
+cta.addEventListener('click', function() {
+    ipcRenderer.send('landing-next');
 });
