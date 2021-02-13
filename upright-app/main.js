@@ -85,6 +85,8 @@ function resetOnboarding() {
 }
 
 app.on('ready', function () {
+    loadMenuBar();
+    return;
 	db.loadDatabase();
 	db.find({
 		onboarded: true

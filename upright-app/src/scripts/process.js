@@ -4,6 +4,7 @@ var net;
 var jsonData = {};
 var filename = "poseData.json";
 var id = 0;
+var keypointIndices = [0, 1, 2, 5, 6];
 
 async function startup() {
 	net = await posenet.load();
@@ -12,9 +13,15 @@ async function startup() {
 async function estimate(image) {
 	var pose = await net.estimateSinglePose(image);
     var d = new Date();
-    pose["time"] = d.toLocaleTimeString();
     console.log(pose);
-    jsonData[id++] = pose;
+    var jsonObject = {"score": pose["score"], "time": d.toLocaleTimeString()};
+    var keypoints = [];
+    for (var i = 0; i < keypointIndices.length; ++i) {
+        keypoints.push(pose["keypoints"][keypointIndices[i]]);
+    }
+    jsonObject["keypoints"] = keypoints;
+    console.log(jsonObject);
+    jsonData[id++] = jsonObject;
 }
 
 function process(data, canvas) {
