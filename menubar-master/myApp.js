@@ -1,6 +1,7 @@
 const {
 	menubar
 } = require('menubar');
+
 const {
 	app,
 	BrowserWindow
@@ -10,6 +11,7 @@ app.on('ready', function () {
 	var mainWindow = new BrowserWindow({
 		width: 800,
 		height: 600,
+    show: false,
 		webPreferences: {
 			nodeIntegration: true
 		}
@@ -27,7 +29,8 @@ app.on('ready', function () {
 	});
 
 	const mb = menubar({
-		browserWindow: mainWindow
+		browserWindow: mainWindow,
+    preloadWindow: true
 	});
 
 	mb.on('ready', () => {
