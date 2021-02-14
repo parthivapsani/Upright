@@ -1,5 +1,15 @@
-import { process, writeToFile } from './process.js';
+const {
+    ipcRenderer
+} = require('electron');
 
+import {
+    process
+} from './process.js';
+import {
+    uploadSlouchToFirestore
+} from './firebase/firestore.js';
+
+const helpButton = document.querySelector('#help-btn');
 let pictureInterval = 3000;
 
 navigator.mediaDevices.getUserMedia({
@@ -13,6 +23,10 @@ navigator.mediaDevices.getUserMedia({
         process(stream, pictureInterval)
     }, pictureInterval);
 }).catch(function (e) {
-	console.log(e)
-    alert('Could not connect stream');
+    console.log(e)
+    alert('could not connect stream');
+});
+
+helpButton.addEventListener('click', function () {
+    ipcRenderer.send('helper-open');
 });
