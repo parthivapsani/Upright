@@ -128,7 +128,7 @@ ipcMain.on('helper-open', (event, arg) => {
 
 app.on('ready', function () {
 	db.loadDatabase();
-	// resetOnboarding();
+	resetOnboarding();
 	db.find({
 		onboarded: true
 	}, function (err, docs) {

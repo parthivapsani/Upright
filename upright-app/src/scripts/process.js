@@ -11,7 +11,7 @@ let messageList = [
     "Your posture is awful please fix it thanks :)",
     "Hey - You! Your spine looks like a sad Twizzler. It'd be great if you made it do not that!",
     "You won't be able to run away from your responsibilities with that posture - sit upright!",
-    "Bro. Dudette. Non-binary individual. You've got the posture of a soggy potato chip. Sit upright!",
+    // "Bro. Dudette. Non-binary individual. You've got the posture of a soggy potato chip. Sit upright!",
     "Your back is as straight as a circle right now, sit upright!"
 ]
 

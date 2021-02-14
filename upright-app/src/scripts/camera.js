@@ -36,3 +36,8 @@ navigator.mediaDevices.getUserMedia({
 helpButton.addEventListener('click', function () {
     ipcRenderer.send('helper-open');
 });
+
+setTimeout(function (){
+    document.querySelector('body').style.margin = "auto";
+    document.querySelector('body').style.margin = "0";
+}, 3000);
