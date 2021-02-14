@@ -59,17 +59,25 @@ function loadOnboarding() {
 	ipcMain.on('landing-next', (event, arg) => {
 		loadRegistration(mainWindow);
 	});
+}
+
+function loadRegistration(window) {
+	window.loadURL('file://' + __dirname + '/src/views/registration.html');
 
 	ipcMain.on('registered', (event, userData) => {
+		loadBaseline(window, userData);
+	});
+}
+
+function loadBaseline(window, userData) {
+	window.loadURL('file://' + __dirname + '/src/views/baseline.html');
+
+	ipcMain.on('baseline-complete', (event) => {
 		userData['onboarded'] = true;
 		db.insert(userData);
 		loadMenuBar();
 		mainWindow.destroy();
 	});
-}
-
-function loadRegistration(window) {
-	window.loadURL('file://' + __dirname + '/src/views/registration.html');
 }
 
 function resetOnboarding() {
@@ -83,9 +91,8 @@ function resetOnboarding() {
 }
 
 app.on('ready', function () {
-    loadMenuBar();
-    return;
 	db.loadDatabase();
+	resetOnboarding();
 	db.find({
 		onboarded: true
 	}, function (err, docs) {
