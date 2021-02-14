@@ -125,7 +125,8 @@ async function estimate(image, interval) {
             notification = new Notification('Sit Upright!',
                 {body: messageList[messageIndex++],
                 hasReply: true,
-                timeoutType: 'never'});
+                timeoutType: 'never',
+                icon: "../assets/letter.png"});
             messageIndex %= messageList.length;
             notification.onclick = () => {
                 notificationDisplayed = false;
