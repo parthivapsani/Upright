@@ -1,4 +1,9 @@
+const {
+    ipcRenderer
+} = require('electron');
+
 const camera = document.querySelector('#camera');
+const doneButton = document.querySelector('#done');
 
 navigator.mediaDevices.getUserMedia({
         video: true
@@ -13,3 +18,7 @@ navigator.mediaDevices.getUserMedia({
         console.log(error);
         alert('Could not connect stream.');
     });
+
+doneButton.addEventListener('click', function() {
+    ipcRenderer.send('baseline-complete');
+})

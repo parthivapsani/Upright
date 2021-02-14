@@ -76,7 +76,7 @@ function loadBaseline(window, userData) {
 		userData['onboarded'] = true;
 		db.insert(userData);
 		loadMenuBar();
-		mainWindow.destroy();
+		window.destroy();
 	});
 }
 
