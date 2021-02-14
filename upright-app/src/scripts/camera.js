@@ -1,7 +1,4 @@
-import {
-  process,
-  writeToFile
-} from './process.js';
+import { process, writeToFile } from './process.js';
 
 var canvas = document.querySelector('canvas');
 
