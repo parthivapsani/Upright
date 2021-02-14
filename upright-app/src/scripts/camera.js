@@ -1,28 +1,18 @@
 import { process, writeToFile } from './process.js';
 
-var canvas = document.querySelector('canvas');
+let pictureInterval = 3000;
 
 navigator.mediaDevices.getUserMedia({
     video: true
-  })
-  .then(function (stream) {
+}).then(function (stream) {
     if (!stream.getVideoTracks().length) {
-      throw new Error("Device does not have webcam");
+        throw new Error("Device does not have webcam");
     }
     document.getElementById('camera').srcObject = stream;
-    //document.getElementById("takePhoto").addEventListener("click", () => {
-      //process(stream, canvas);
-      setInterval(() => {
-        process(stream, canvas)
-      }, 3500);
-
-    //});
-    //document.getElementById("save").addEventListener("click", () => {
-    //  writeToFile(document, window);
-    //});
-
-
-  }).catch(function (e) {
-	  console.log(e)
-    alert('could not connect stream');
-  });
+    setInterval(() => {
+        process(stream, pictureInterval)
+    }, pictureInterval);
+}).catch(function (e) {
+	console.log(e)
+    alert('Could not connect stream');
+});
