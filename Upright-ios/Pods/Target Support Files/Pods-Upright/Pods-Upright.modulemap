@@ -1,0 +1,6 @@
+framework module Pods_Upright {
+  umbrella header "Pods-Upright-umbrella.h"
+
+  export *
+  module * { export * }
+}

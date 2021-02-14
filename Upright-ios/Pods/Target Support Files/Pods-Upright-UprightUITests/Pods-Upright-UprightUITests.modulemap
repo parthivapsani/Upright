@@ -1,0 +1,6 @@
+framework module Pods_Upright_UprightUITests {
+  umbrella header "Pods-Upright-UprightUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
