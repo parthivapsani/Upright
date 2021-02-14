@@ -3,10 +3,12 @@ const {
     remote
 } = require('electron');
 
+import { uploadSlouchToFirestore } from './firebase/firestore.js';
+
+
 let net;
 let jsonData = {};
 let filename = "poseData.json";
-let id = 0;
 let keypointIndices = [1, 2, 5, 6];
 
 //from 0 to 1
@@ -14,12 +16,19 @@ let keypointIndices = [1, 2, 5, 6];
 //1 means you'll basically never be slouching
 const sensitivity = 0.09;
 const confidenceMinimum = 0.3;
+const frameGap = 20;
 
 let baseline = null;
+let UID = null;
+let lastNotificationClose = 0;
+let lastPostureTime = 0;
+let notificationDisplayed = false;
+let notification = null;
 
 ipcRenderer.on('userData', function (event, userData) {
-    console.log('Got user data in process.js ', userData);
+    // console.log('Got user data in process.js ', userData);
     baseline = userData.baseline;
+    UID = userData.uid;
 });
 
 function getRatio(pose) {
@@ -35,14 +44,19 @@ function getRatio(pose) {
     return ratio;
 }
 
-async function getBaseline(image, completion) {
-    let pose = await net.estimateSinglePose(image);
-
+function getSlouchConfidence(pose) {
     let confidenceOfSlouch = 1;
     for (let i = 0; i < keypointIndices.length; ++i) {
         confidenceOfSlouch = Math.min(confidenceOfSlouch, pose["keypoints"][keypointIndices[i]]["score"]);
     }
-    // Less likely than 30% that any of the 
+    return confidenceOfSlouch;
+}
+
+async function getBaseline(image, completion) {
+    let pose = await net.estimateSinglePose(image);
+    let confidenceOfSlouch = getSlouchConfidence(pose);
+
+    // Less likely than 30% that all of the keypoints were mapped
     if (confidenceOfSlouch <= confidenceMinimum) {
         console.log("Image does not have necessary keypoints visible");
         return;
@@ -56,12 +70,9 @@ function computeBaseline(stream, completion) {
     const track = stream.getVideoTracks()[0];
     let imageCapture = new ImageCapture(track);
     imageCapture.grabFrame().then(imageBitmap => {
-            // console.log('Frame grabbed: ', imageBitmap);
-            getBaseline(imageBitmap, completion);
-        })
-        .catch(err => console.error('Compute baseline failed: ', err));
+        getBaseline(imageBitmap, completion);
+    }).catch(err => console.error('Compute baseline failed: ', err));
 }
-
 
 function dist(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
@@ -71,81 +82,82 @@ async function startup() {
     net = await posenet.load();
 }
 
-async function estimate(image) {
+async function estimate(image, interval) {
     let pose = await net.estimateSinglePose(image);
-    let d = new Date();
-    console.log(pose);
-    console.log(d.toString());
-    let jsonObject = {
-        "score": pose["score"],
-        "time": d.toString()
-    };
-    let keypoints = [];
-    let confidenceOfSlouch = 1;
-    for (let i = 0; i < keypointIndices.length; ++i) {
-        keypoints.push(pose["keypoints"][keypointIndices[i]]);
-        confidenceOfSlouch = Math.min(confidenceOfSlouch, pose["keypoints"][keypointIndices[i]]["score"]);
-    }
+    let confidenceOfSlouch = getSlouchConfidence(pose);
+    let time = new Date();
+
     // Less likely than 30% that any of the 
     if (confidenceOfSlouch <= confidenceMinimum) {
+        if (notificationDisplayed && (time.getTime() - lastNotificationClose) > frameGap * interval &&
+            (time.getTime() - lastPostureTime) > frameGap * interval) {
+            console.log("User notification is stale and has been removed");
+            notification.close();
+            notificationDisplayed = false;
+            lastNotificationClose = time.getTime();
+        }
+        console.log("Image does not have necessary keypoints visible");
         return;
     }
-    jsonObject["keypoints"] = keypoints;
 
     let ratio = getRatio(pose);
-
-    if (baseline === null) {
-        baseline = ratio;
-    }
-
-    console.log("slouch index:");
-    console.log(ratio);
-    console.log(baseline);
-    // console.log(Math.abs((ratio - baseline)));
-
     let percentSlouch = 0;
+    lastPostureTime = time.getTime();
 
+    percentSlouch = Math.max(Math.abs((ratio - baseline * (1 + sensitivity))),
+        Math.abs((baseline * (1 - sensitivity) - ratio))) * 1000;
+
+    // If user is detected to be slouching
     if (ratio > baseline * (1 + sensitivity) || ratio < baseline * (1 - sensitivity)) {
-        console.log("you're slouching")
-        // console.log((ratio - baseline * (1 + sensitivity)) * 1000);
-        // console.log((baseline * (1 - sensitivity) - ratio) * 1000);
-        percentSlouch = Math.max(Math.abs((ratio - baseline * (1 + sensitivity))),
-            Math.abs((baseline * (1 - sensitivity) - ratio))) * 1000;
         percentSlouch = Math.min(99, percentSlouch + 30);
+        console.log("You're slouching");
+        if (!notificationDisplayed && (time.getTime() - lastNotificationClose) > frameGap * interval) {
+            notificationDisplayed = true;
+            let roundedSlouchPercent = Math.round(percentSlouch);
+            notification = new Notification('Sit Upright!',
+                {body: `You're slouching ${roundedSlouchPercent}%, sit up for better posture!`,
+                hasReply: true,
+                timeoutType: 'never'});
+            notification.onclick = () => {
+                notificationDisplayed = false;
+                lastNotificationClose = time.getTime();
+                console.log("Notification closed");
+            }
+        }
     }
-    // if (percentSlouch === 0) {
-    //     return;
-    // }
+    // Otherwise, close the notification if the user is no longer slouching
+    else {
+        if (notificationDisplayed) {
+            notificationDisplayed = false;
+            notification.close();
+            lastNotificationClose = time.getTime();
+        }
+    }
+
     console.log(percentSlouch + "% slouch");
+
     let slouchData = {
         "slouch-confidence": confidenceOfSlouch,
         "slouch-percent": percentSlouch,
-        "time": d.toString()
+        "time": time.getTime()
     };
-    jsonData[id++] = jsonObject;
-    return slouchData;
+
+    uploadSlouchToFirestore(UID, slouchData);
 }
 
-function process(data, canvas) {
+function process(data, interval) {
     const track = data.getVideoTracks()[0];
     let imageCapture = new ImageCapture(track);
     imageCapture.grabFrame().then(imageBitmap => {
-            console.log('Frame grabbed: ', imageBitmap);
-            //canvas.width = imageBitmap.width;
-            //canvas.height = imageBitmap.height;
-            //console.log(canvas);
-            //canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
-            estimate(imageBitmap);
-        })
-        .catch(err => console.error('takePhoto() failed: ', err));
+        estimate(imageBitmap, interval);
+    }).catch(err => console.error('takePhoto() failed: ', err));
 }
 
 function makeFile() {
     let blob = new Blob([JSON.stringify(jsonData, undefined, 4)], {
         type: 'application/json'
     });
-    let file = window.URL.createObjectURL(blob)
-    return file;
+    return window.URL.createObjectURL(blob)
 }
 
 function writeToFile(document, window) {

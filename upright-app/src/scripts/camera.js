@@ -1,33 +1,32 @@
 const {
-  ipcRenderer
+    ipcRenderer
 } = require('electron');
 
 import {
-  process,
-  writeToFile
+    process
 } from './process.js';
 import {
-  uploadSlouchToFirestore
+    uploadSlouchToFirestore
 } from './firebase/firestore.js';
 
 const helpButton = document.querySelector('#help-btn');
+let pictureInterval = 3000;
 
 navigator.mediaDevices.getUserMedia({
     video: true
-  })
-  .then(function (stream) {
+}).then(function (stream) {
     if (!stream.getVideoTracks().length) {
-      throw new Error("Device does not have webcam");
+        throw new Error("Device does not have webcam");
     }
     document.getElementById('camera').srcObject = stream;
     setInterval(() => {
-      process(stream, canvas)
-    }, 3500);
-  }).catch(function (e) {
+        process(stream, pictureInterval)
+    }, pictureInterval);
+}).catch(function (e) {
     console.log(e)
     alert('could not connect stream');
-  });
+});
 
 helpButton.addEventListener('click', function () {
-  ipcRenderer.send('helper-open');
+    ipcRenderer.send('helper-open');
 });
