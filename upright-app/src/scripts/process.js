@@ -8,11 +8,11 @@ let filename = "poseData.json";
 let keypointIndices = [1, 2, 5, 6];
 
 let messageList = [
-    "Are you worried you're not sitting upright? If so, you're correct! Your posture is awful please fix it thanks :)",
+    "Your posture is awful please fix it thanks :)",
     "Hey - You! Your spine looks like a sad Twizzler. It'd be great if you made it do not that!",
-    "Michael Scott once said \"I am running away from my responsibilities. And it feels good.\" With your posture, you won't get very far - sit upright!",
-    "Bro. Dudette. Gender-Noncomforming Pronoun directed at you. You've got the posture of a soggy potato chip. Sit upright!",
-    "If you're bored, you can close your eyes and rotate a cow in your mind - for free! That has no relation to your bad posture but sit upright anyway"
+    "You won't be able to run away from your responsibilities with that posture - sit upright!",
+    "Bro. Dudette. Non-binary individual. You've got the posture of a soggy potato chip. Sit upright!",
+    "Your back is as straight as a circle right now, sit upright!"
 ]
 
 //from 0 to 1
