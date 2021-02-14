@@ -13,18 +13,19 @@ navigator.mediaDevices.getUserMedia({
       throw new Error("Device does not have webcam");
     }
     document.getElementById('camera').srcObject = stream;
-    document.getElementById("takePhoto").addEventListener("click", () => {
+    //document.getElementById("takePhoto").addEventListener("click", () => {
       //process(stream, canvas);
       setInterval(() => {
         process(stream, canvas)
       }, 3500);
 
-    });
-    document.getElementById("save").addEventListener("click", () => {
-      writeToFile(document, window);
-    });
+    //});
+    //document.getElementById("save").addEventListener("click", () => {
+    //  writeToFile(document, window);
+    //});
 
 
-  }).catch(function () {
+  }).catch(function (e) {
+	  console.log(e)
     alert('could not connect stream');
   });
