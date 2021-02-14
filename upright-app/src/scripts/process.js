@@ -3,7 +3,7 @@ const {
     remote
 } = require('electron');
 
-import { uploadSlouchToFirestore } from './firebase/firestore.js';
+// import { uploadSlouchToFirestore } from './firebase/firestore.js';
 
 
 let net;
@@ -24,9 +24,9 @@ let lastNotificationClose = 0;
 let lastPostureTime = 0;
 let notificationDisplayed = false;
 let notification = null;
+let firestoreData = {"slouch": false};
 
 ipcRenderer.on('userData', function (event, userData) {
-    // console.log('Got user data in process.js ', userData);
     baseline = userData.baseline;
     UID = userData.uid;
 });
@@ -97,7 +97,7 @@ async function estimate(image, interval) {
             lastNotificationClose = time.getTime();
         }
         console.log("Image does not have necessary keypoints visible");
-        return;
+        firestoreData = {"slouch": false};
     }
 
     let ratio = getRatio(pose);
@@ -142,7 +142,7 @@ async function estimate(image, interval) {
         "time": time.getTime()
     };
 
-    uploadSlouchToFirestore(UID, slouchData);
+    firestoreData = {"uid": UID, "data": slouchData, "slouch": true};
 }
 
 function process(data, interval) {
@@ -150,7 +150,8 @@ function process(data, interval) {
     let imageCapture = new ImageCapture(track);
     imageCapture.grabFrame().then(imageBitmap => {
         estimate(imageBitmap, interval);
-    }).catch(err => console.error('takePhoto() failed: ', err));
+    }).catch(err => console.error('process failed: ', err));
+    return firestoreData;
 }
 
 function makeFile() {

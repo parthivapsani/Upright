@@ -11,6 +11,7 @@ import {
 
 const helpButton = document.querySelector('#help-btn');
 let pictureInterval = 3000;
+let firestoreData = {"slouch": false};
 
 navigator.mediaDevices.getUserMedia({
     video: true
@@ -20,7 +21,12 @@ navigator.mediaDevices.getUserMedia({
     }
     document.getElementById('camera').srcObject = stream;
     setInterval(() => {
-        process(stream, pictureInterval)
+        firestoreData = process(stream, pictureInterval);
+        // console.log(firestoreData);
+        if (firestoreData["slouch"]) {
+            uploadSlouchToFirestore(firestoreData["uid"], firestoreData["data"]);
+            // console.log("Uploaded to firestore");
+        }
     }, pictureInterval);
 }).catch(function (e) {
     console.log(e)
