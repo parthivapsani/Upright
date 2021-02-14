@@ -11,18 +11,18 @@ const {
 const Datastore = require('nedb');
 
 const db = new Datastore({
-	filename: 'local/defaults'
+	filename: 'local/defaults.db'
 });
 
-function loadMenuBar() {
-	var mainWindow = new BrowserWindow({
-		width: 800,
-		height: 600,
-		show: false,
-		webPreferences: {
-			nodeIntegration: true
+function getUserData(completion) {
+	db.find({
+		onboarded: true
+	}, function (err, docs) {
+		if (docs.length > 0) {
+			completion(docs[0]);
 		}
 	});
+}
 
 function loadHelper() {
 	var mainWindow = new BrowserWindow({
@@ -58,29 +58,29 @@ function loadMenuBar() {
 			index: 'file://' + __dirname + '/src/views/index.html'
 		});
 
-	const mb = menubar({
-		browserWindow: mainWindow,
-		preloadWindow: true
-	});
 
 		mb.on('ready', () => {
 			mb.window.webContents.send('userData', userData);
             mb.showWindow();
 		});
 
-	mb.on('window-all-closed', function () {
-		if (process.platform != 'darwin')
-			mb.quit();
+		mb.on('window-all-closed', function () {
+			if (process.platform != 'darwin')
+				mb.quit();
+		});
 	});
 }
 
 function loadOnboarding() {
 	var mainWindow = new BrowserWindow({
+		maxWidth: 1440,
+		maxHeight: 900,
 		webPreferences: {
 			nodeIntegration: true
 		}
 	});
-	mainWindow.loadURL('file://' + __dirname + '/src/views/onboarding.html');
+	mainWindow.maximize();
+	mainWindow.loadURL('file://' + __dirname + '/src/views/landing.html');
 
 	ipcMain.on('landing-next', (event, arg) => {
 		loadRegistration(mainWindow);

@@ -148,7 +148,6 @@ async function estimate(image, interval) {
 function process(data, interval) {
     const track = data.getVideoTracks()[0];
     let imageCapture = new ImageCapture(track);
-    console.log("here");
     imageCapture.grabFrame().then(imageBitmap => {
         estimate(imageBitmap, interval);
     }).catch(err => console.error('process failed: ', err));
@@ -162,6 +161,22 @@ function makeFile() {
     return window.URL.createObjectURL(blob)
 }
 
-export { process }
+function writeToFile(document, window) {
+    let link = document.createElement('a');
+    link.setAttribute('download', filename);
+    link.href = makeFile(window);
+    document.body.appendChild(link);
+    window.requestAnimationFrame(function () {
+        let event = new MouseEvent('click');
+        link.dispatchEvent(event);
+        document.body.removeChild(link);
+    });
+}
 
+startup();
 
+export {
+    process,
+    writeToFile,
+    computeBaseline
+}
