@@ -2,6 +2,8 @@ const {
     ipcRenderer
 } = require('electron');
 
+import { computeBaseline } from './process.js';
+
 const camera = document.querySelector('#camera');
 const doneButton = document.querySelector('#done');
 
@@ -20,5 +22,7 @@ navigator.mediaDevices.getUserMedia({
     });
 
 doneButton.addEventListener('click', function() {
-    ipcRenderer.send('baseline-complete');
+    computeBaseline(camera.srcObject, function(baseline) {
+        ipcRenderer.send('baseline-complete', baseline);
+    });
 })
