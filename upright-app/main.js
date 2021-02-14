@@ -49,17 +49,20 @@ function loadMenuBar() {
 			resizable: false,
 			webPreferences: {
 				nodeIntegration: true,
-			}
+			},
 		};
 
 		const mb = menubar({
 			browserWindow: mainWindowOptions,
 			preloadWindow: true,
-			index: 'file://' + __dirname + '/src/views/index.html'
+			index: 'file://' + __dirname + '/src/views/index.html',
+            icon: "./src/assets/small_letter.png"
 		});
 
 
 		mb.on('ready', () => {
+            console.log(app.name);
+            app.setAppUserModelId(app.name);
 			mb.window.webContents.send('userData', userData);
             mb.showWindow();
 		});
@@ -123,8 +126,6 @@ ipcMain.on('helper-open', (event, arg) => {
 });
 
 app.on('ready', function () {
-    console.log(app.name);
-    app.setAppUserModelId(app.name);
 	db.loadDatabase();
 	// resetOnboarding();
 	db.find({

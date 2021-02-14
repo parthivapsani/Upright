@@ -1,9 +1,15 @@
 {
   "name": "upright-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "ML-powered Posture Correction",
   "main": "main.js",
   "productName": "Upright",
+  "build": {
+      "appId": "com.upright.app",
+      "mac": {
+          "category": "upright.health.app"
+      }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
@@ -12,7 +18,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^11.2.3"
+    "electron": "^11.2.3",
+    "electron-builder": "^22.9.1",
+    "electron-packager": "^15.2.0"
   },
   "dependencies": {
     "@tensorflow-models/posenet": "^2.2.1",

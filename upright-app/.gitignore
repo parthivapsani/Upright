@@ -1,2 +1,3 @@
 node_modules
 local/defaults.db
+*.DS_Store

@@ -126,7 +126,7 @@ async function estimate(image, interval) {
                 {body: messageList[messageIndex++],
                 hasReply: true,
                 timeoutType: 'never',
-                icon: "../assets/letter.png"});
+                icon: "../assets/medium_letter.png"});
             messageIndex %= messageList.length;
             notification.onclick = () => {
                 notificationDisplayed = false;
