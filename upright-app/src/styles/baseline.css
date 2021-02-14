@@ -1,0 +1,19 @@
+.Baseline-title {
+    font-size: 48px;
+    color: #00BFA6;
+}
+
+.Baseline-subtitle {
+    opacity: 0.7;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 8px;
+    max-width: 600px;
+    text-align: center;
+}
+
+.Baseline-camera {
+    max-width: 800px;
+    max-height: 600px;
+    margin: 32px;
+}
