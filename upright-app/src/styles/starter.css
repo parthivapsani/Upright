@@ -1,0 +1,95 @@
+/*
+
+Fonts:
+font-family: 'Poppins', sans-serif;
+
+Colors:
+upright-green: #00BFA6;
+upright-green-light: #26C9B3;
+upright-green-dark: #00A28D;
+light-gray: #E6E6E6;
+
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+html {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+span,
+button,
+a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+button:focus,
+input:focus {
+    outline: none;
+}
+
+.cta {
+    background: #00BFA6;
+    border-radius: 8px;
+    width: 250px;
+    height: 50px;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    transition: all 0.3s;
+}
+
+.cta:hover {
+    background: #00A28D;
+}
+
+.inline-button {
+    color: #00BFA6;
+    font-weight: 600;
+    opacity: 0.7;
+    background: none;
+    transition: all 0.3s;
+}
+
+.inline-button:hover {
+    color: #00A28D;
+    opacity: 1;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    height: 100%;
+}

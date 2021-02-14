@@ -1,0 +1,17 @@
+.Helper-title {
+    font-size: 48px;
+    color: #00BFA6;
+}
+
+.Helper-subtitle {
+    opacity: 0.7;
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.Helper-desc {
+    max-width: 600px;
+    text-align: center;
+    margin: 16px 0 32px;
+}

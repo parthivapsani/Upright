@@ -24,20 +24,49 @@ function loadMenuBar() {
 		}
 	});
 
-	mainWindow.loadURL('file://' + __dirname + '/views/index.html');
-
-	mainWindow.on('closed', function () {
-		mainWindow = null;
+function loadHelper() {
+	var mainWindow = new BrowserWindow({
+		maxWidth: 1440,
+		maxHeight: 900,
+		webPreferences: {
+			nodeIntegration: true
+		}
 	});
+	mainWindow.maximize();
+	mainWindow.loadURL('file://' + __dirname + '/src/views/helper.html');
+
+	ipcMain.on('helper-close', (event, arg) => {
+		mainWindow.quit();
+	});
+}
+
+function loadMenuBar() {
+	getUserData(function (userData) {
+		var mainWindowOptions = {
+			width: 640,
+			height: 480,
+			show: false,
+			resizable: false,
+			webPreferences: {
+				nodeIntegration: true,
+			}
+		};
+
+		const mb = menubar({
+			browserWindow: mainWindowOptions,
+			preloadWindow: true,
+			index: 'file://' + __dirname + '/src/views/index.html'
+		});
 
 	const mb = menubar({
 		browserWindow: mainWindow,
 		preloadWindow: true
 	});
 
-	mb.on('ready', () => {
-		console.log('Running menu bar');
-	});
+		mb.on('ready', () => {
+			mb.window.webContents.send('userData', userData);
+            mb.showWindow();
+		});
 
 	mb.on('window-all-closed', function () {
 		if (process.platform != 'darwin')
@@ -53,11 +82,56 @@ function loadOnboarding() {
 	});
 	mainWindow.loadURL('file://' + __dirname + '/src/views/onboarding.html');
 
-	ipcMain.on('onboarding-completed', (event, arg) => {
-		console.log('completed!');
+	ipcMain.on('landing-next', (event, arg) => {
+		loadRegistration(mainWindow);
 	});
 }
 
+function loadRegistration(window) {
+	window.loadURL('file://' + __dirname + '/src/views/registration.html');
+
+	ipcMain.on('registered', (event, userData) => {
+		loadBaseline(window, userData);
+	});
+}
+
+function loadBaseline(window, userData) {
+	window.loadURL('file://' + __dirname + '/src/views/baseline.html');
+
+	ipcMain.on('baseline-complete', (event, baseline) => {
+		userData['onboarded'] = true;
+		userData['baseline'] = baseline;
+		db.insert(userData);
+		loadMenuBar();
+		loadHelper();
+		window.destroy();
+	});
+}
+
+function resetOnboarding() {
+	db.remove({
+		onboarded: true
+	}, {
+		multi: true
+	}, function (err, numReplaced) {
+		console.log('Deleted ', numReplaced, ' onboarding files.');
+	});
+}
+
+ipcMain.on('helper-open', (event, arg) => {
+	loadHelper();
+});
+
 app.on('ready', function () {
-	loadMenuBar();
+	db.loadDatabase();
+	// resetOnboarding();
+	db.find({
+		onboarded: true
+	}, function (err, docs) {
+		if (docs.length > 0) {
+			loadMenuBar();
+		} else {
+			loadOnboarding();
+		}
+	})
 });
