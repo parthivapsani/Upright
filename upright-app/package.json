@@ -14,10 +14,7 @@
     "electron": "^11.2.3"
   },
   "dependencies": {
-    "@tensorflow-models/posenet": "^2.2.1",
-    "firebase": "^8.2.7",
     "menubar": "^9.0.2",
-    "nedb": "^1.8.0",
-    "path": "^0.12.7"
+    "nedb": "^1.8.0"
   }
 }

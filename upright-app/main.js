@@ -8,107 +8,56 @@ const {
 	ipcMain
 } = require('electron');
 
-const path = require('path');
 const Datastore = require('nedb');
 
 const db = new Datastore({
-	filename: 'local/defaults.db'
+	filename: 'local/defaults'
 });
 
-function getUserData(completion) {
-	db.find({
-		onboarded: true
-	}, function (err, docs) {
-		if (docs.length > 0) {
-			completion(docs[0]);
+function loadMenuBar() {
+	var mainWindow = new BrowserWindow({
+		width: 800,
+		height: 600,
+		show: false,
+		webPreferences: {
+			nodeIntegration: true
 		}
 	});
-}
 
-function loadMenuBar() {
-	getUserData(function (userData) {
-		var mainWindowOptions = {
-			width: 800,
-			height: 600,
-			show: false,
-			webPreferences: {
-				nodeIntegration: true,
-			}
-		};
+	mainWindow.loadURL('file://' + __dirname + '/views/index.html');
 
-		const mb = menubar({
-			browserWindow: mainWindowOptions,
-			preloadWindow: true,
-		});
+	mainWindow.on('closed', function () {
+		mainWindow = null;
+	});
 
+	const mb = menubar({
+		browserWindow: mainWindow,
+		preloadWindow: true
+	});
 
-		mb.on('ready', () => {
-			mb.window.webContents.send('userData', userData);
-		});
+	mb.on('ready', () => {
+		console.log('Running menu bar');
+	});
 
-		mb.on('window-all-closed', function () {
-			if (process.platform != 'darwin')
-				mb.quit();
-		});
+	mb.on('window-all-closed', function () {
+		if (process.platform != 'darwin')
+			mb.quit();
 	});
 }
 
 function loadOnboarding() {
 	var mainWindow = new BrowserWindow({
-		maxWidth: 1440,
-		maxHeight: 900,
 		webPreferences: {
 			nodeIntegration: true
 		}
 	});
-	mainWindow.maximize();
-	mainWindow.loadURL('file://' + __dirname + '/src/views/landing.html');
+	mainWindow.loadURL('file://' + __dirname + '/src/views/onboarding.html');
 
-	ipcMain.on('landing-next', (event, arg) => {
-		loadRegistration(mainWindow);
-	});
-}
-
-function loadRegistration(window) {
-	window.loadURL('file://' + __dirname + '/src/views/registration.html');
-
-	ipcMain.on('registered', (event, userData) => {
-		loadBaseline(window, userData);
-	});
-}
-
-function loadBaseline(window, userData) {
-	window.loadURL('file://' + __dirname + '/src/views/baseline.html');
-
-	ipcMain.on('baseline-complete', (event, baseline) => {
-		userData['onboarded'] = true;
-		userData['baseline'] = baseline;
-		db.insert(userData);
-		loadMenuBar();
-		window.destroy();
-	});
-}
-
-function resetOnboarding() {
-	db.remove({
-		onboarded: true
-	}, {
-		multi: true
-	}, function (err, numReplaced) {
-		console.log('Deleted ', numReplaced, ' onboarding files.');
+	ipcMain.on('onboarding-completed', (event, arg) => {
+		console.log('completed!');
 	});
 }
 
 app.on('ready', function () {
-	db.loadDatabase();
-	// resetOnboarding();
-	db.find({
-		onboarded: true
-	}, function (err, docs) {
-		if (docs.length > 0) {
-			loadMenuBar();
-		} else {
-			loadOnboarding();
-		}
-	})
+	loadMenuBar();
 });
