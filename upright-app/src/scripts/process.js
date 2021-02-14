@@ -12,7 +12,7 @@ let messageList = [
     "Hey - You! Your spine looks like a sad Twizzler. It'd be great if you made it do not that!",
     "Michael Scott once said \"I am running away from my responsibilities. And it feels good.\" With your posture, you won't get very far - sit upright!",
     "Bro. Dudette. Gender-Noncomforming Pronoun directed at you. You've got the posture of a soggy potato chip. Sit upright!",
-    "If you're bored you can close your eyes and rotate a cow in your mind - for free! That has no relation to your bad posture but sit upright anyway"
+    "If you're bored, you can close your eyes and rotate a cow in your mind - for free! That has no relation to your bad posture but sit upright anyway"
 ]
 
 //from 0 to 1

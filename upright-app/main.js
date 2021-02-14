@@ -123,6 +123,8 @@ ipcMain.on('helper-open', (event, arg) => {
 });
 
 app.on('ready', function () {
+    console.log(app.name);
+    app.setAppUserModelId(app.name);
 	db.loadDatabase();
 	// resetOnboarding();
 	db.find({
