@@ -13,6 +13,47 @@ const confidenceMinimum = 0.3;
 let baseline = null;
 
 
+function getRatio(pose) {
+    let eye_l = pose["keypoints"][1]["position"];
+	let eye_r = pose["keypoints"][2]["position"];
+	let eyeWidth = dist(eye_l['x'], eye_l['y'], eye_r['x'], eye_r['y']);
+
+	let shoulder_l = pose["keypoints"][5]["position"];
+	let shoulder_r = pose["keypoints"][6]["position"];
+    let shoulderWidth = dist(shoulder_l['x'], shoulder_l['y'], shoulder_r['x'], shoulder_r['y']);
+
+	let ratio = eyeWidth / shoulderWidth;
+    return ratio;
+}
+
+async function estimate(image) {
+	let pose = await net.estimateSinglePose(image);
+
+    let confidenceOfSlouch = 1;
+    for (let i = 0; i < keypointIndices.length; ++i) {
+        keypoints.push(pose["keypoints"][keypointIndices[i]]);
+        confidenceOfSlouch = Math.min(confidenceOfSlouch, pose["keypoints"][keypointIndices[i]]["score"]);
+    }
+    // Less likely than 30% that any of the 
+    if (confidenceOfSlouch <= confidenceMinimum) {
+        console.log("Image does not have necessary keypoints visible");
+        return;
+    }
+
+    baseline = getRatio(pose);
+}
+
+function computeBaseline(stream) {
+    const track = data.getVideoTracks()[0];
+    let imageCapture = new ImageCapture(track);
+    imageCapture.grabFrame().then(imageBitmap => {
+        // console.log('Frame grabbed: ', imageBitmap);
+		getBaseline(imageBitmap);
+    })
+    .catch(err => console.error('Compute baseline failed: ', err));
+}
+
+
 function dist(x1, y1, x2, y2){
 	return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1 - y2, 2))
 }
@@ -39,15 +80,7 @@ async function estimate(image) {
     }
     jsonObject["keypoints"] = keypoints;
 
-	let eye_l = pose["keypoints"][1]["position"];
-	let eye_r = pose["keypoints"][2]["position"];
-	let eyeWidth = dist(eye_l['x'], eye_l['y'], eye_r['x'], eye_r['y']);
-
-	let shoulder_l = pose["keypoints"][5]["position"];
-	let shoulder_r = pose["keypoints"][6]["position"];
-    let shoulderWidth = dist(shoulder_l['x'], shoulder_l['y'], shoulder_r['x'], shoulder_r['y']);
-
-	let ratio = eyeWidth / shoulderWidth;
+	let ratio = getRatio(pose);
 
 	if (baseline === null){
 		baseline = ratio;
