@@ -63,6 +63,7 @@ function loadMenuBar() {
 		mb.on('ready', () => {
             console.log(app.name);
             app.setAppUserModelId(app.name);
+			mb.tray.setImage('letter-20.png');
 			mb.window.webContents.send('userData', userData);
             mb.showWindow();
 		});
