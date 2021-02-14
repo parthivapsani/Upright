@@ -1,30 +1,36 @@
 const {
-    ipcRenderer,
-    remote
+    ipcRenderer
 } = require('electron');
-
-// import { uploadSlouchToFirestore } from './firebase/firestore.js';
-
 
 let net;
 let jsonData = {};
 let filename = "poseData.json";
 let keypointIndices = [1, 2, 5, 6];
 
+let messageList = [
+    "Are you worried you're not sitting upright? If so, you're correct! Your posture is awful please fix it thanks :)",
+    "Hey - You! Your spine looks like a sad Twizzler. It'd be great if you made it do not that!",
+    "Michael Scott once said \"I am running away from my responsibilities. And it feels good.\" With your posture, you won't get very far - sit upright!",
+    "Bro. Dudette. Gender-Noncomforming Pronoun directed at you. You've got the posture of a soggy potato chip. Sit upright!",
+    "If you're bored you can close your eyes and rotate a cow in your mind - for free! That has no relation to your bad posture but sit upright anyway"
+]
+
 //from 0 to 1
 //0 means it'll say ur always slouching
 //1 means you'll basically never be slouching
 const sensitivity = 0.09;
 const confidenceMinimum = 0.3;
-const frameGap = 20;
+const frameGap = 3;
 
 let baseline = null;
 let UID = null;
 let lastNotificationClose = 0;
 let lastPostureTime = 0;
 let notificationDisplayed = false;
+let lastNotificationTime = 0;
 let notification = null;
 let firestoreData = {"slouch": false};
+let messageIndex;
 
 ipcRenderer.on('userData', function (event, userData) {
     baseline = userData.baseline;
@@ -80,6 +86,7 @@ function dist(x1, y1, x2, y2) {
 
 async function startup() {
     net = await posenet.load();
+    messageIndex = Math.floor(Math.random() * messageList.length);
 }
 
 async function estimate(image, interval) {
@@ -90,7 +97,8 @@ async function estimate(image, interval) {
     // Less likely than 30% that any of the 
     if (confidenceOfSlouch <= confidenceMinimum) {
         if (notificationDisplayed && (time.getTime() - lastNotificationClose) > frameGap * interval &&
-            (time.getTime() - lastPostureTime) > frameGap * interval) {
+            (time.getTime() - lastPostureTime) > frameGap * interval && 
+            (time.getTime() - lastNotificationTime) > frameGap * interval) {
             console.log("User notification is stale and has been removed");
             notification.close();
             notificationDisplayed = false;
@@ -113,13 +121,15 @@ async function estimate(image, interval) {
         console.log("You're slouching");
         if (!notificationDisplayed && (time.getTime() - lastNotificationClose) > frameGap * interval) {
             notificationDisplayed = true;
-            let roundedSlouchPercent = Math.round(percentSlouch);
+            lastNotificationTime = time.getTime();
             notification = new Notification('Sit Upright!',
-                {body: `You're slouching ${roundedSlouchPercent}%, sit up for better posture!`,
+                {body: messageList[messageIndex++],
                 hasReply: true,
                 timeoutType: 'never'});
+            messageIndex %= messageList.length;
             notification.onclick = () => {
                 notificationDisplayed = false;
+                lastNotificationTime = 0;
                 lastNotificationClose = time.getTime();
                 console.log("Notification closed");
             }
@@ -127,7 +137,7 @@ async function estimate(image, interval) {
     }
     // Otherwise, close the notification if the user is no longer slouching
     else {
-        if (notificationDisplayed) {
+        if (notificationDisplayed  && (time.getTime() - lastNotificationTime) > frameGap * interval) {
             notificationDisplayed = false;
             notification.close();
             lastNotificationClose = time.getTime();
