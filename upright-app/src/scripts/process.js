@@ -113,9 +113,9 @@ async function estimate(image) {
             Math.abs((baseline * (1 - sensitivity) - ratio))) * 1000;
         percentSlouch = Math.min(99, percentSlouch + 30);
     }
-    if (percentSlouch === 0) {
-        return;
-    }
+    // if (percentSlouch === 0) {
+    //     return;
+    // }
     console.log(percentSlouch + "% slouch");
     let slouchData = {
         "slouch-confidence": confidenceOfSlouch,

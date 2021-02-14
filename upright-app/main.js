@@ -44,6 +44,7 @@ function loadMenuBar() {
 
 		mb.on('ready', () => {
 			mb.window.webContents.send('userData', userData);
+            mb.showWindow();
 		});
 
 		mb.on('window-all-closed', function () {
