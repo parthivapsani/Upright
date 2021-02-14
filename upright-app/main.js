@@ -8,7 +8,6 @@ const {
 	ipcMain
 } = require('electron');
 
-const path = require('path');
 const Datastore = require('nedb');
 
 const db = new Datastore({
@@ -25,12 +24,29 @@ function getUserData(completion) {
 	});
 }
 
+function loadHelper() {
+	var mainWindow = new BrowserWindow({
+		maxWidth: 1440,
+		maxHeight: 900,
+		webPreferences: {
+			nodeIntegration: true
+		}
+	});
+	mainWindow.maximize();
+	mainWindow.loadURL('file://' + __dirname + '/src/views/helper.html');
+
+	ipcMain.on('helper-close', (event, arg) => {
+		mainWindow.quit();
+	});
+}
+
 function loadMenuBar() {
 	getUserData(function (userData) {
 		var mainWindowOptions = {
-			width: 800,
-			height: 600,
+			width: 640,
+			height: 480,
 			show: false,
+			resizable: false,
 			webPreferences: {
 				nodeIntegration: true,
 			}
@@ -39,6 +55,7 @@ function loadMenuBar() {
 		const mb = menubar({
 			browserWindow: mainWindowOptions,
 			preloadWindow: true,
+			index: 'file://' + __dirname + '/src/views/index.html'
 		});
 
 
@@ -86,6 +103,7 @@ function loadBaseline(window, userData) {
 		userData['baseline'] = baseline;
 		db.insert(userData);
 		loadMenuBar();
+		loadHelper();
 		window.destroy();
 	});
 }
@@ -100,9 +118,13 @@ function resetOnboarding() {
 	});
 }
 
+ipcMain.on('helper-open', (event, arg) => {
+	loadHelper();
+});
+
 app.on('ready', function () {
 	db.loadDatabase();
-	// resetOnboarding();
+	resetOnboarding();
 	db.find({
 		onboarded: true
 	}, function (err, docs) {
