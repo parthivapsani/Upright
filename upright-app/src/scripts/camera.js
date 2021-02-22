@@ -23,10 +23,10 @@ navigator.mediaDevices.getUserMedia({
     setInterval(() => {
         firestoreData = process(stream, pictureInterval);
         // console.log(firestoreData);
-        if (firestoreData["slouch"]) {
-            uploadSlouchToFirestore(firestoreData["uid"], firestoreData["data"]);
-            // console.log("Uploaded to firestore");
-        }
+        //if (firestoreData["slouch"]) {
+        //    uploadSlouchToFirestore(firestoreData["uid"], firestoreData["data"]);
+        //    // console.log("Uploaded to firestore");
+        //}
     }, pictureInterval);
 }).catch(function (e) {
     console.log(e)
