@@ -18,9 +18,9 @@ let messageList = [
 //from 0 to 1
 //0 means it'll say ur always slouching
 //1 means you'll basically never be slouching
-const sensitivity = 0.09;
-const confidenceMinimum = 0.3;
-const frameGap = 3;
+var sensitivity = 0.09;
+var confidenceMinimum = 0.3;
+var frameGap = 3;
 
 let baseline = null;
 let UID = null;
@@ -36,6 +36,24 @@ ipcRenderer.on('userData', function (event, userData) {
     baseline = userData.baseline;
     UID = userData.uid;
 });
+
+//valid value is from 0 to 1
+//but it makes sense to keep it capped from like 0.03ish to 0.2ish
+function updateSensitivity(s){
+	sensitivity = s;
+}
+
+//minimum amount of percentage needed for posenet prediction
+//valid value is from 0 to 1
+//but it makes sense to keep it capped from like 0.1 to .95
+function updateConfidence(c){
+	confidenceMinimum = c;
+}
+
+//keep in mind for future: what if fps differs across devices
+function updateFrameGap(f){
+	frameGap = f;
+}
 
 function getRatio(pose) {
     let eye_l = pose["keypoints"][1]["position"];
@@ -189,5 +207,8 @@ startup();
 export {
     process,
     writeToFile,
-    computeBaseline
+    computeBaseline,
+	updateSensitivity,
+	updateConfidence,
+	updateFrameGap
 }
