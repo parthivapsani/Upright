@@ -30,11 +30,11 @@ navigator.mediaDevices.getUserMedia({
     }, pictureInterval);
 }).catch(function (e) {
     console.log(e)
-    alert('could not connect stream');
+    // alert('could not connect stream');
 });
 
 helpButton.addEventListener('click', function () {
-    ipcRenderer.send('helper-open');
+    ipcRenderer.send('settings-open');
 });
 
 setTimeout(function (){

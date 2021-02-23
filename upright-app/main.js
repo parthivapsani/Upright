@@ -24,7 +24,7 @@ function getUserData(completion) {
 	});
 }
 
-function loadHelper() {
+function loadSettings() {
 	var mainWindow = new BrowserWindow({
 		maxWidth: 1440,
 		maxHeight: 900,
@@ -33,9 +33,9 @@ function loadHelper() {
 		}
 	});
 	mainWindow.maximize();
-	mainWindow.loadURL('file://' + __dirname + '/src/views/helper.html');
+	mainWindow.loadURL('file://' + __dirname + '/src/views/settings.html');
 
-	ipcMain.on('helper-close', (event, arg) => {
+	ipcMain.on('settings-close', (event, arg) => {
 		mainWindow.quit();
 	});
 }
@@ -107,7 +107,7 @@ function loadBaseline(window, userData) {
 		userData['baseline'] = baseline;
 		db.insert(userData);
 		loadMenuBar();
-		loadHelper();
+		loadSettings();
 		window.destroy();
 	});
 }
@@ -122,13 +122,13 @@ function resetOnboarding() {
 	});
 }
 
-ipcMain.on('helper-open', (event, arg) => {
-	loadHelper();
+ipcMain.on('settings-open', (event, arg) => {
+	loadSettings();
 });
 
 app.on('ready', function () {
 	db.loadDatabase();
-	resetOnboarding();
+	// resetOnboarding();
 	db.find({
 		onboarded: true
 	}, function (err, docs) {

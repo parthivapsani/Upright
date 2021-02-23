@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Upright</title>
+  <link rel="stylesheet" href="../styles/starter.css">
+  <link rel="stylesheet" href="../styles/settings.css">
+</head>
+
+<body>
+  <div class="Settings app">
+    <div class="Settings-container">
+      <h1 class="Settings-title">Settings</h1>
+      <div class="Settings-section">
+        <h2 class="Section-header">
+          Slouch Detection
+        </h2>
+
+        <form class="Setting-form" id="detection-type">
+          <h4 class="Setting-name">
+            Detection type
+          </h4>
+          <p class="Setting-descLargeBottom Setting-desc">
+            The specific method of slouch detection for your posture.
+          </p>
+
+          <input type="radio" name="eye-distance" id="eye-distance" class="Setting-radio">
+          <label for="eye-distance" class="Setting-optionName">
+            Eye distance
+            <span class="Setting-optionDesc Setting-radioDesc">
+              Stationary only but more accuate
+            </span>
+          </label>
+
+          <input type="radio" name="eye-shoulder-ratio" id="eye-shoulder-ratio" class="Setting-radio">
+          <label for="eye-shoulder-ratio" class="Setting-optionName">
+            Eye-shoulder ratio
+            <span class="Setting-optionDesc Setting-radioDesc">
+              Distance and angle agnostic but less accurate
+            </span>
+          </label>
+
+          <input type="radio" name="gaze-estimation" id="gaze-estimation" class="Setting-radio">
+          <label for="gaze-estimation" class="Setting-optionName">
+            Gaze estimation
+            <span class="Setting-optionDesc Setting-radioDesc">
+              Lorem ipsum some description here
+            </span>
+          </label>
+
+        </form>
+
+        <button class="cta-secondary Setting-baselineCTA">
+          Reset Baselines
+        </button>
+
+      </div>
+
+      <div class="Settings-section">
+        <h2 class="Section-header">
+          Customization
+        </h2>
+
+        <form class="Setting-form" id="customization">
+          <h4 class="Setting-name">
+            Sensitivity: 91%
+          </h4>
+          <p class="Setting-desc">
+            What percentage of slouch do you want to be notified at? Tip: you can adjust your sensitivity while viewing
+            the slouch indicator at the bottom of the menubar.
+          </p>
+          <input type="range" min="1" max="100" value="91" id="sensitivity" class="Setting-slider">
+
+          <h4 class="Setting-name">
+            Confidence: 90%
+          </h4>
+          <p class="Setting-desc">
+            The confidence in the PoseNet predictions when receiving a notification.
+          </p>
+          <input type="range" min="30" max="100" value="90" id="confidence" class="Setting-slider">
+
+          <h4 class="Setting-name">
+            FPS: 3 seconds
+          </h4>
+          <p class="Setting-desc">
+            How often the frame checks your posture
+          </p>
+          <input type="range" min="0.5" max="10" value="3" id="fps" class="Setting-slider">
+        </form>
+      </div>
+
+      <div class="Settings-section">
+        <h2 class="Section-header">
+          Notifications
+        </h2>
+
+        <form class="Setting-form" id="notifications">
+          <h4 class="Setting-name">
+            Cooldown: 9 seconds
+          </h4>
+          <p class="Setting-desc">
+            Minimum time between notifications
+          </p>
+          <input type="range" min="1" max="60" value="9" id="cooldown" class="Setting-slider">
+
+          <h4 class="Setting-name">
+            Sound
+          </h4>
+          <p class="Setting-desc">
+            Whether or not the notification will play a sound
+          </p>
+          <label class="Setting-switch">
+            <input type="checkbox" id="sound" class="Setting-switchBox">
+            <span class="Setting-switchSlider"></span>
+          </label>
+
+          <h4 class="Setting-name">
+            Out of Frame
+          </h4>
+          <p class="Setting-desc">
+            Receive a notification if you're no longer visible in the frame.
+          </p>
+          <label class="Setting-switch">
+            <input type="checkbox" id="out-of-frame" class="Setting-switchBox">
+            <span class="Setting-switchSlider"></span>
+          </label>
+
+        </form>
+      </div>
+
+      <div class="Settings-section">
+        <h2 class="Section-header">
+          About
+        </h2>
+
+        <p class="Setting-desc">
+          Upright uses your laptop's camera to analyze and help you improve your posture. Now that you have registered
+          and calibrated the system, simply keep Upright open in the background and continue working. Upright will
+          notify you if you begin to slouch so you can correct it. Don't forget to download the Upright iOS app to
+          view your daily metrics. You can now close this window, and Upright will continue to help you improve your
+          posture!
+        </p>
+
+        <button class="inline-button Settings-inlineButton">Support</button>
+        <button class="inline-button Settings-inlineButton">Privacy Policy</button>
+      </div>
+    </div>
+  </div>
+  <!-- <script src="../scripts/Settings.js"></script> -->
+</body>
+
+</html>

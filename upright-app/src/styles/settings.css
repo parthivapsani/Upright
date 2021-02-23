@@ -1,0 +1,150 @@
+.Settings-title {
+    font-size: 48px;
+    color: #00bfa6;
+    text-align: left;
+    flex: 0 0 100%;
+    margin-left: 16px;
+    margin-bottom: 16px;
+}
+
+.Settings-container {
+    display: flex;
+    width: 100%;
+    max-width: 900px;
+    flex-wrap: wrap;
+    max-height: 100%;
+    margin: 32px;
+    min-width: 400px;
+    overflow: scroll;
+}
+
+.Settings-section {
+    flex: 1 0 50%;
+    min-width: 300px;
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+.Section-header {
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.Setting-name {
+    font-weight: 600;
+    opacity: 0.7;
+    margin-top: 16px;
+}
+
+.Setting-desc {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.Setting-descLargeBottom {
+    margin-bottom: 16px;
+}
+
+.Setting-optionName {
+    margin-top: 16px;
+}
+
+.Setting-optionDesc {
+    display: block;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 8px;
+}
+
+.Setting-radio {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    border: 2px solid #00bfa6;
+    vertical-align: text-top;
+}
+
+input[type="radio"]:checked {
+    background: #00bfa6;
+}
+
+.Setting-radioDesc {
+    margin-left: 30px;
+}
+
+.Setting-slider {
+    appearance: none;
+    width: 250px;
+    height: 8px;
+    background-color: #b8d6d2;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.Setting-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background: #00bfa6;
+}
+
+.Setting-baselineCTA {
+    margin-top: 16px;
+}
+
+.Setting-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+}
+
+.Setting-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.Setting-switchSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 16px;
+}
+
+.Setting-switchSlider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .Setting-switchSlider {
+    background-color: #00BFA6;
+}
+
+input:focus + .Setting-switchSlider {
+    box-shadow: 0 0 1px #00BFA6;
+}
+
+input:checked + .Setting-switchSlider:before {
+    left: 32px;
+}
+
+.Settings-inlineButton {
+    display: block;
+    margin-top: 8px;
+}
