@@ -5,13 +5,9 @@ const {
 import {
     process
 } from './process.js';
-import {
-    uploadSlouchToFirestore
-} from './firebase/firestore.js';
 
 const helpButton = document.querySelector('#help-btn');
 let pictureInterval = 3000;
-let firestoreData = {"slouch": false};
 
 navigator.mediaDevices.getUserMedia({
     video: true
@@ -21,12 +17,7 @@ navigator.mediaDevices.getUserMedia({
     }
     document.getElementById('camera').srcObject = stream;
     setInterval(() => {
-        firestoreData = process(stream, pictureInterval);
-        // console.log(firestoreData);
-        //if (firestoreData["slouch"]) {
-        //    uploadSlouchToFirestore(firestoreData["uid"], firestoreData["data"]);
-        //    // console.log("Uploaded to firestore");
-        //}
+        process(stream, pictureInterval);
     }, pictureInterval);
 }).catch(function (e) {
     console.log(e)
@@ -36,8 +27,3 @@ navigator.mediaDevices.getUserMedia({
 helpButton.addEventListener('click', function () {
     ipcRenderer.send('settings-open');
 });
-
-setTimeout(function (){
-    document.querySelector('body').style.margin = "auto";
-    document.querySelector('body').style.margin = "0";
-}, 3000);

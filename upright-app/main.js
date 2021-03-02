@@ -20,6 +20,8 @@ function getUserData(completion) {
 	}, function (err, docs) {
 		if (docs.length > 0) {
 			completion(docs[0]);
+		} else {
+			completion(undefined);
 		}
 	});
 }
@@ -34,6 +36,13 @@ function loadSettings() {
 	});
 	mainWindow.maximize();
 	mainWindow.loadURL('file://' + __dirname + '/src/views/settings.html');
+
+	mainWindow.webContents.on('did-finish-load', function () {
+		getUserData(function(userData) {
+			console.log('sending user data', userData);
+			mainWindow.webContents.send('userData2', userData);
+		})
+	});
 
 	ipcMain.on('settings-close', (event, arg) => {
 		mainWindow.quit();
@@ -87,7 +96,7 @@ function loadOnboarding() {
 	mainWindow.loadURL('file://' + __dirname + '/src/views/landing.html');
 
 	ipcMain.on('landing-next', (event, arg) => {
-		loadRegistration(mainWindow);
+		loadBaseline(mainWindow)
 	});
 }
 
@@ -99,16 +108,38 @@ function loadRegistration(window) {
 	});
 }
 
-function loadBaseline(window, userData) {
+function loadBaseline(window) {
 	window.loadURL('file://' + __dirname + '/src/views/baseline.html');
 
 	ipcMain.on('baseline-complete', (event, baseline) => {
-		userData['onboarded'] = true;
-		userData['baseline'] = baseline;
-		db.insert(userData);
-		loadMenuBar();
-		loadSettings();
-		window.destroy();
+		getUserData(function(data) {
+			if (typeof(data) != 'undefined') {
+				data.baseline = baseline;
+				db.update(
+					{ id: userData.id }, 
+					{ $set: { baseline: baseline }}, 
+					function(err, numReplaced) {
+						console.log('Updated ', numReplaced, ' files');
+						window.destroy();
+					});
+			} else {
+				var userData = {
+					onboarded: true,
+					baseline,
+					detectionType: 'eyeShoulderRatio',
+					sensitivity: 91,
+					confidence: 90,
+					fps: 3,
+					cooldown: 9,
+					sound: true,
+					outOfFrame: true
+				}
+				db.insert(userData);
+				loadMenuBar();
+				loadSettings();
+				window.destroy();
+			}
+		});
 	});
 }
 
@@ -124,6 +155,18 @@ function resetOnboarding() {
 
 ipcMain.on('settings-open', (event, arg) => {
 	loadSettings();
+});
+
+ipcMain.on('reset-baseline', (event, arg) => {
+	loadBaseline();
+});
+
+ipcMain.on('update-user-data', (event, userData) => {
+	db.update({
+		_id: userData._id
+	}, userData, function(err, numReplaced) {
+		console.log(`Updated ${numReplaced} files`);
+	});
 });
 
 app.on('ready', function () {

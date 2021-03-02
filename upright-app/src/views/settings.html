@@ -16,7 +16,7 @@
           Slouch Detection
         </h2>
 
-        <form class="Setting-form" id="detection-type">
+        <form class="Setting-form" id="detectionType">
           <h4 class="Setting-name">
             Detection type
           </h4>
@@ -24,7 +24,7 @@
             The specific method of slouch detection for your posture.
           </p>
 
-          <input type="radio" name="eye-distance" id="eye-distance" class="Setting-radio">
+          <input type="radio" name="eye-distance" id="eyeDistance" class="Setting-radio">
           <label for="eye-distance" class="Setting-optionName">
             Eye distance
             <span class="Setting-optionDesc Setting-radioDesc">
@@ -32,7 +32,7 @@
             </span>
           </label>
 
-          <input type="radio" name="eye-shoulder-ratio" id="eye-shoulder-ratio" class="Setting-radio">
+          <input type="radio" name="eye-shoulder-ratio" id="eyeShoulderRatio" class="Setting-radio">
           <label for="eye-shoulder-ratio" class="Setting-optionName">
             Eye-shoulder ratio
             <span class="Setting-optionDesc Setting-radioDesc">
@@ -40,17 +40,9 @@
             </span>
           </label>
 
-          <input type="radio" name="gaze-estimation" id="gaze-estimation" class="Setting-radio">
-          <label for="gaze-estimation" class="Setting-optionName">
-            Gaze estimation
-            <span class="Setting-optionDesc Setting-radioDesc">
-              Lorem ipsum some description here
-            </span>
-          </label>
-
         </form>
 
-        <button class="cta-secondary Setting-baselineCTA">
+        <button id="resetBaselines" class="cta-secondary Setting-baselineCTA">
           Reset Baselines
         </button>
 
@@ -62,30 +54,30 @@
         </h2>
 
         <form class="Setting-form" id="customization">
-          <h4 class="Setting-name">
-            Sensitivity: 91%
+          <h4 class="Setting-name" id="sensitivityHeader">
+            Sensitivity: 0%
           </h4>
           <p class="Setting-desc">
             What percentage of slouch do you want to be notified at? Tip: you can adjust your sensitivity while viewing
             the slouch indicator at the bottom of the menubar.
           </p>
-          <input type="range" min="1" max="100" value="91" id="sensitivity" class="Setting-slider">
+          <input type="range" min="1" max="100" value="0" id="sensitivity" class="Setting-slider">
 
-          <h4 class="Setting-name">
-            Confidence: 90%
+          <h4 class="Setting-name" id="confidenceHeader">
+            Confidence: 0%
           </h4>
           <p class="Setting-desc">
             The confidence in the PoseNet predictions when receiving a notification.
           </p>
-          <input type="range" min="30" max="100" value="90" id="confidence" class="Setting-slider">
+          <input type="range" min="30" max="100" value="0" id="confidence" class="Setting-slider">
 
-          <h4 class="Setting-name">
-            FPS: 3 seconds
+          <h4 class="Setting-name" id="fpsHeader">
+            FPS: 0.5
           </h4>
           <p class="Setting-desc">
             How often the frame checks your posture
           </p>
-          <input type="range" min="0.5" max="10" value="3" id="fps" class="Setting-slider">
+          <input type="range" min="0.5" max="10" value="0.5" id="fps" class="Setting-slider">
         </form>
       </div>
 
@@ -95,13 +87,13 @@
         </h2>
 
         <form class="Setting-form" id="notifications">
-          <h4 class="Setting-name">
-            Cooldown: 9 seconds
+          <h4 class="Setting-name" id="cooldownHeader">
+            Cooldown: 1 seconds
           </h4>
           <p class="Setting-desc">
             Minimum time between notifications
           </p>
-          <input type="range" min="1" max="60" value="9" id="cooldown" class="Setting-slider">
+          <input type="range" min="1" max="60" value="1" id="cooldown" class="Setting-slider">
 
           <h4 class="Setting-name">
             Sound
@@ -121,7 +113,7 @@
             Receive a notification if you're no longer visible in the frame.
           </p>
           <label class="Setting-switch">
-            <input type="checkbox" id="out-of-frame" class="Setting-switchBox">
+            <input type="checkbox" id="outOfFrame" class="Setting-switchBox">
             <span class="Setting-switchSlider"></span>
           </label>
 
@@ -146,7 +138,7 @@
       </div>
     </div>
   </div>
-  <!-- <script src="../scripts/Settings.js"></script> -->
+  <script src="../scripts/settings.js"></script>
 </body>
 
 </html>

@@ -15,7 +15,7 @@
     max-height: 100%;
     margin: 32px;
     min-width: 400px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .Settings-section {
