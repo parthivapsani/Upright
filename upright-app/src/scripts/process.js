@@ -26,13 +26,22 @@ let baseline = null;
 let lastNotificationClose = 0;
 let lastPostureTime = 0;
 let notificationDisplayed = false;
-let lastNotificationTime = 0;
+let lastNotificationTime = new Date();
+let minimumNotificationTime = 9000;
+let withSound = true;
 let notification = null;
 let messageIndex;
+let display = null;
 
 ipcRenderer.on('userData', function (event, userData) {
     console.log('got new user data: ', userData);
     baseline = userData.baseline;
+    sensitivity = userData.sensitivity / 100.0;
+    confidenceMinimum = userData.confidence / 100.0;
+    // frameGap = userData.fps; // not using FPS
+    minimumNotificationTime = userData.cooldown * 1000.0;
+    withSound = userData.sound;
+    console.log('set cooldown to ', minimumNotificationTime);
 });
 
 //valid value is from 0 to 1
@@ -112,51 +121,73 @@ async function estimate(image, interval) {
 
     // Less likely than 30% that any of the 
     if (confidenceOfSlouch <= confidenceMinimum) {
-        if (notificationDisplayed && (time.getTime() - lastNotificationClose) > frameGap * interval &&
-            (time.getTime() - lastPostureTime) > frameGap * interval && 
-            (time.getTime() - lastNotificationTime) > frameGap * interval) {
+        if (notificationDisplayed && (time - lastNotificationClose) > frameGap * interval &&
+            (time - lastPostureTime) > frameGap * interval && 
+            (time - lastNotificationTime) > frameGap * interval) {
             console.log("User notification is stale and has been removed");
             notification.close();
             notificationDisplayed = false;
-            lastNotificationClose = time.getTime();
+            lastNotificationClose = time;
         }
         console.log("Image does not have necessary keypoints visible");
     }
 
     let ratio = getRatio(pose);
     let percentSlouch = 0;
-    lastPostureTime = time.getTime();
+    lastPostureTime = time;
 
     percentSlouch = Math.max(Math.abs((ratio - baseline * (1 + sensitivity))),
         Math.abs((baseline * (1 - sensitivity) - ratio))) * 1000;
 
     // If user is detected to be slouching
+    // if (confidenceOfSlouch > confidenceMinimum && (ratio > baseline * (1 + sensitivity) || ratio < baseline * (1 - sensitivity))) {
     if (ratio > baseline * (1 + sensitivity) || ratio < baseline * (1 - sensitivity)) {
         percentSlouch = Math.min(99, percentSlouch + 30);
         console.log("You're slouching");
-        if (!notificationDisplayed && (time.getTime() - lastNotificationClose) > frameGap * interval) {
+        console.log("time since last notification: ", (time - lastNotificationTime));
+        console.log("minimum time: ", minimumNotificationTime);
+        console.log("notification displayed: ", notificationDisplayed);
+        display.innerHTML = `You're slouching — sit upright!`;
+        // For now, I'm taking out the check for !notificationDisplayed since if a user swipes to 
+        // dismiss a notification, notificationDisplayed is not updated.
+        if ((time - lastNotificationTime) > minimumNotificationTime) {
             notificationDisplayed = true;
-            lastNotificationTime = time.getTime();
+            lastNotificationTime = time;
             notification = new Notification('Sit Upright!',
                 {body: messageList[messageIndex++],
                 hasReply: true,
                 timeoutType: 'never',
-                icon: "../assets/medium_letter.png"});
+                icon: "../assets/medium_letter.png",
+                silent: !withSound});
             messageIndex %= messageList.length;
             notification.onclick = () => {
                 notificationDisplayed = false;
                 lastNotificationTime = 0;
-                lastNotificationClose = time.getTime();
+                lastNotificationClose = time;
                 console.log("Notification closed");
+            }
+            notification.addEventListener('close', (event) => {
+                notificationDisplayed = false;
+                lastNotificationTime = 0;
+                lastNotificationClose = time;
+                console.log("Notification closed3");
+            });
+            notification.onclose = (event) => {
+                notificationDisplayed = false;
+                lastNotificationTime = 0;
+                lastNotificationClose = time;
+                console.log("Notification closed2");
             }
         }
     }
     // Otherwise, close the notification if the user is no longer slouching
     else {
-        if (notificationDisplayed  && (time.getTime() - lastNotificationTime) > frameGap * interval) {
+        console.log("You're not slouching");
+        display.innerHTML = `Great posture!`;
+        if (notification != null) {
             notificationDisplayed = false;
             notification.close();
-            lastNotificationClose = time.getTime();
+            lastNotificationClose = time;
         }
     }
 
@@ -165,11 +196,12 @@ async function estimate(image, interval) {
     let slouchData = {
         "slouch-confidence": confidenceOfSlouch,
         "slouch-percent": percentSlouch,
-        "time": time.getTime()
+        "time": time
     };
 }
 
-function process(data, interval) {
+function process(data, interval, displayElement) {
+    display = displayElement;
     const track = data.getVideoTracks()[0];
     let imageCapture = new ImageCapture(track);
     imageCapture.grabFrame().then(imageBitmap => {
