@@ -68,8 +68,24 @@ input:focus {
     transition: all 0.3s;
 }
 
+.cta-secondary {
+    background: white;
+    border: 2px solid #00A28D;
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #00A28D;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
 .cta:hover {
     background: #00A28D;
+}
+
+.cta-secondary:hover {
+    background: #00A28D;
+    color: white;
 }
 
 .inline-button {

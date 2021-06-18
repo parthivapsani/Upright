@@ -23,18 +23,16 @@ var confidenceMinimum = 0.3;
 var frameGap = 3;
 
 let baseline = null;
-let UID = null;
 let lastNotificationClose = 0;
 let lastPostureTime = 0;
 let notificationDisplayed = false;
 let lastNotificationTime = 0;
 let notification = null;
-let firestoreData = {"slouch": false};
 let messageIndex;
 
 ipcRenderer.on('userData', function (event, userData) {
+    console.log('got new user data: ', userData);
     baseline = userData.baseline;
-    UID = userData.uid;
 });
 
 //valid value is from 0 to 1
@@ -123,7 +121,6 @@ async function estimate(image, interval) {
             lastNotificationClose = time.getTime();
         }
         console.log("Image does not have necessary keypoints visible");
-        firestoreData = {"slouch": false};
     }
 
     let ratio = getRatio(pose);
@@ -170,8 +167,6 @@ async function estimate(image, interval) {
         "slouch-percent": percentSlouch,
         "time": time.getTime()
     };
-
-    firestoreData = {"uid": UID, "data": slouchData, "slouch": true};
 }
 
 function process(data, interval) {
@@ -180,7 +175,6 @@ function process(data, interval) {
     imageCapture.grabFrame().then(imageBitmap => {
         estimate(imageBitmap, interval);
     }).catch(err => console.error('process failed: ', err));
-    return firestoreData;
 }
 
 function makeFile() {
