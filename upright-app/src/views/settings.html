@@ -11,42 +11,12 @@
   <div class="Settings app">
     <div class="Settings-container">
       <h1 class="Settings-title">Settings</h1>
-      <div class="Settings-section">
+      <!-- <div class="Settings-section">
         <h2 class="Section-header">
           Slouch Detection
         </h2>
 
-        <form class="Setting-form" id="detectionType">
-          <h4 class="Setting-name">
-            Detection type
-          </h4>
-          <p class="Setting-descLargeBottom Setting-desc">
-            The specific method of slouch detection for your posture.
-          </p>
-
-          <input type="radio" name="eye-distance" id="eyeDistance" class="Setting-radio">
-          <label for="eye-distance" class="Setting-optionName">
-            Eye distance
-            <span class="Setting-optionDesc Setting-radioDesc">
-              Stationary only but more accuate
-            </span>
-          </label>
-
-          <input type="radio" name="eye-shoulder-ratio" id="eyeShoulderRatio" class="Setting-radio">
-          <label for="eye-shoulder-ratio" class="Setting-optionName">
-            Eye-shoulder ratio
-            <span class="Setting-optionDesc Setting-radioDesc">
-              Distance and angle agnostic but less accurate
-            </span>
-          </label>
-
-        </form>
-
-        <button id="resetBaselines" class="cta-secondary Setting-baselineCTA">
-          Reset Baselines
-        </button>
-
-      </div>
+      </div> -->
 
       <div class="Settings-section">
         <h2 class="Section-header">
@@ -71,14 +41,18 @@
           </p>
           <input type="range" min="30" max="100" value="0" id="confidence" class="Setting-slider">
 
-          <h4 class="Setting-name" id="fpsHeader">
+          <!-- <h4 class="Setting-name" id="fpsHeader">
             FPS: 0.5
           </h4>
           <p class="Setting-desc">
             How often the frame checks your posture
           </p>
-          <input type="range" min="0.5" max="10" value="0.5" id="fps" class="Setting-slider">
+          <input type="range" min="0.5" max="10" value="0.5" id="fps" class="Setting-slider"> -->
         </form>
+
+        <button id="resetBaselines" class="cta-secondary Setting-baselineCTA">
+          Reset Baselines
+        </button>
       </div>
 
       <div class="Settings-section">
@@ -106,7 +80,7 @@
             <span class="Setting-switchSlider"></span>
           </label>
 
-          <h4 class="Setting-name">
+          <!-- <h4 class="Setting-name">
             Out of Frame
           </h4>
           <p class="Setting-desc">
@@ -115,7 +89,7 @@
           <label class="Setting-switch">
             <input type="checkbox" id="outOfFrame" class="Setting-switchBox">
             <span class="Setting-switchSlider"></span>
-          </label>
+          </label> -->
 
         </form>
       </div>

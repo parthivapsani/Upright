@@ -25,7 +25,7 @@ html {
   height: 40px;
   padding: 8px 20px;
   border-radius: 20px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
   color: rgba(38, 201, 179, 1);
   font-weight: 700;
   font-size: 16px;
@@ -42,5 +42,22 @@ html {
   width: 40px;
   padding: 8px 20px;
   border-radius: 20px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+}
+
+#display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 8px;
+  bottom: 16px;
+  height: 40px;
+  padding: 8px 20px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  color: rgba(38, 201, 179, 1);
+  font-weight: 700;
+  font-size: 16px;
 }

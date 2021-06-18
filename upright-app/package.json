@@ -5,27 +5,34 @@
   "main": "main.js",
   "productName": "Upright",
   "build": {
-      "appId": "com.upright.app",
-      "mac": {
-          "category": "upright.health.app"
-      }
+    "appId": "com.upright.app",
+    "mac": {
+      "category": "upright.health.app"
+    }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
   },
+  "files": [
+    "src",
+    "local",
+    "*.js",
+    "letter-20.png"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^11.2.3",
+    "electron": "^11.4.8",
     "electron-builder": "^22.9.1",
     "electron-packager": "^15.2.0"
   },
   "dependencies": {
-    "@tensorflow-models/posenet": "^2.2.1",
-    "firebase": "^8.2.7",
-    "menubar": "^9.0.2",
-    "nedb": "^1.8.0"
+    "@tensorflow-models/posenet": "^2.2.2",
+    "menubar": "^9.0.4",
+    "nedb": "^1.8.0",
+    "path": "^0.12.7",
+    "url": "^0.11.0"
   }
 }

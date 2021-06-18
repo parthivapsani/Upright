@@ -7,6 +7,7 @@ import {
 } from './process.js';
 
 const helpButton = document.querySelector('#help-btn');
+const display = document.querySelector('#display');
 let pictureInterval = 3000;
 
 navigator.mediaDevices.getUserMedia({
@@ -17,7 +18,7 @@ navigator.mediaDevices.getUserMedia({
     }
     document.getElementById('camera').srcObject = stream;
     setInterval(() => {
-        process(stream, pictureInterval);
+        process(stream, pictureInterval, display);
     }, pictureInterval);
 }).catch(function (e) {
     console.log(e)

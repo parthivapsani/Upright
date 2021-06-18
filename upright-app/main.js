@@ -8,17 +8,22 @@ const {
 	ipcMain
 } = require('electron');
 
+const url = require('url');
+const path = require('path');
 const Datastore = require('nedb');
 
 const db = new Datastore({
-	filename: 'local/defaults.db'
+	filename: path.join(__dirname, 'defaults.db')
 });
+
+let currentMenubar = null;
 
 function getUserData(completion) {
 	db.find({
 		onboarded: true
 	}, function (err, docs) {
 		if (docs.length > 0) {
+			console.log('perform completion with, ', docs[0]);
 			completion(docs[0]);
 		} else {
 			completion(undefined);
@@ -35,7 +40,11 @@ function loadSettings() {
 		}
 	});
 	mainWindow.maximize();
-	mainWindow.loadURL('file://' + __dirname + '/src/views/settings.html');
+	mainWindow.loadURL(url.format({
+		pathname: path.join(__dirname, 'src/views/settings.html'),
+		protocol: 'file:',
+		slashes: true
+	  }));
 
 	mainWindow.webContents.on('did-finish-load', function () {
 		getUserData(function(userData) {
@@ -44,8 +53,12 @@ function loadSettings() {
 		})
 	});
 
+	ipcMain.on('reset-baselines', (event, arg) => {
+		loadBaseline(mainWindow);
+	});
+
 	ipcMain.on('settings-close', (event, arg) => {
-		mainWindow.quit();
+		mainWindow.destroy();
 	});
 }
 
@@ -68,11 +81,10 @@ function loadMenuBar() {
             icon: "./src/assets/small_letter.png"
 		});
 
-
 		mb.on('ready', () => {
             console.log(app.name);
             app.setAppUserModelId(app.name);
-			mb.tray.setImage('letter-20.png');
+			mb.tray.setImage(path.join(__dirname, 'letter-20.png'));
 			mb.window.webContents.send('userData', userData);
             mb.showWindow();
 		});
@@ -81,6 +93,8 @@ function loadMenuBar() {
 			if (process.platform != 'darwin')
 				mb.quit();
 		});
+
+		currentMenubar = mb;
 	});
 }
 
@@ -93,7 +107,11 @@ function loadOnboarding() {
 		}
 	});
 	mainWindow.maximize();
-	mainWindow.loadURL('file://' + __dirname + '/src/views/landing.html');
+	mainWindow.loadURL(url.format({
+		pathname: path.join(__dirname, 'src/views/landing.html'),
+		protocol: 'file:',
+		slashes: true
+	  }));
 
 	ipcMain.on('landing-next', (event, arg) => {
 		loadBaseline(mainWindow)
@@ -109,26 +127,35 @@ function loadRegistration(window) {
 }
 
 function loadBaseline(window) {
-	window.loadURL('file://' + __dirname + '/src/views/baseline.html');
+	// window.loadURL('file://' + __dirname + '/src/views/baseline.html');
+	window.loadURL(url.format({
+		pathname: path.join(__dirname, 'src/views/baseline.html'),
+		protocol: 'file:',
+		slashes: true
+	  }));
+
 
 	ipcMain.on('baseline-complete', (event, baseline) => {
 		getUserData(function(data) {
 			if (typeof(data) != 'undefined') {
 				data.baseline = baseline;
 				db.update(
-					{ id: userData.id }, 
+					{ _id: data._id }, 
 					{ $set: { baseline: baseline }}, 
 					function(err, numReplaced) {
-						console.log('Updated ', numReplaced, ' files');
+						console.log('Updated ', numReplaced, ' files; Set baseline to ', baseline);
+						if (currentMenubar != null) {
+							currentMenubar.window.webContents.send('userData', data);
+							currentMenubar.showWindow();
+						}
 						window.destroy();
 					});
 			} else {
 				var userData = {
 					onboarded: true,
 					baseline,
-					detectionType: 'eyeShoulderRatio',
-					sensitivity: 91,
-					confidence: 90,
+					sensitivity: 9,
+					confidence: 30,
 					fps: 3,
 					cooldown: 9,
 					sound: true,
@@ -136,7 +163,6 @@ function loadBaseline(window) {
 				}
 				db.insert(userData);
 				loadMenuBar();
-				loadSettings();
 				window.destroy();
 			}
 		});
@@ -166,12 +192,14 @@ ipcMain.on('update-user-data', (event, userData) => {
 		_id: userData._id
 	}, userData, function(err, numReplaced) {
 		console.log(`Updated ${numReplaced} files`);
+		if (currentMenubar != null) {
+			currentMenubar.window.webContents.send('userData', userData);
+		}
 	});
 });
 
 app.on('ready', function () {
 	db.loadDatabase();
-	// resetOnboarding();
 	db.find({
 		onboarded: true
 	}, function (err, docs) {
@@ -180,5 +208,5 @@ app.on('ready', function () {
 		} else {
 			loadOnboarding();
 		}
-	})
+	});
 });
