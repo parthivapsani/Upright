@@ -53,3 +53,19 @@ rightArrow.addEventListener('click', function() {
 cta.addEventListener('click', function() {
     ipcRenderer.send('landing-next');
 });
+
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        console.log('User is signed in');
+    } else {
+        firebase.auth().signInAnonymously()
+            .then(() => {
+                // Signed in..
+                console.log('User successfully signed in');
+            })
+            .catch((error) => {
+                const errorMessage = error.message;
+                console.log('Error signing in: ', errorMessage);
+            });
+    }
+});

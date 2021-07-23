@@ -45,6 +45,7 @@ function registrationLogIn() {
     logIn(email, password, function(userData) {
         console.log('Successfully logged in ', userData);
         ipcRenderer.send('registered', userData);
+		firebase.analytics().logEvent('logged in');
     });
 }
 
@@ -66,6 +67,7 @@ function registrationSignUp() {
     }, function(userData) {
         console.log('Succesfully signed up ', userData);
         ipcRenderer.send('registered', userData);
+		firebase.analytics().logEvent('registered');
     })
 }
 

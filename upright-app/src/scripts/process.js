@@ -112,6 +112,8 @@ function dist(x1, y1, x2, y2) {
 async function startup() {
     net = await posenet.load();
     messageIndex = Math.floor(Math.random() * messageList.length);
+	firebase.analytics().logEvent('process started up');
+
 }
 
 async function estimate(image, interval) {

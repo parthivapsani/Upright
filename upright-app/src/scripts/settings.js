@@ -57,6 +57,11 @@ confidenceSlider.onchange = saveData;
 confidenceSlider.oninput = function() {
     userData.confidence = confidenceSlider.value;
     confidenceHeader.innerHTML = `Confidence: ${userData.confidence}%`;
+	firebase.analytics().logEvent('select_content', {
+	  content_type: 'image',
+	  content_id: 'P12453',
+	  items: [{ name: 'Kittens' }]
+	});
 }
 
 // fpsSlider.onchange = saveData;
@@ -69,13 +74,16 @@ cooldownSlider.onchange = saveData;
 cooldownSlider.oninput = function() {
     userData.cooldown = cooldownSlider.value;
     cooldownHeader.innerHTML = `Cooldown: ${userData.cooldown} seconds`;
+	firebase.analytics().logEvent('updated cooldown');
 }
 
 soundSwitch.onchange = function() {
     userData.sound = soundSwitch.checked;
     saveData();
+	firebase.analytics().logEvent('updated soundswitch');
 }
 
 resetBaselinesButton.addEventListener('click', function () {
+	firebase.analytics().logEvent('baselines reset');
     ipcRenderer.send('reset-baselines');
 });

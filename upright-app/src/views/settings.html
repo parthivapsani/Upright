@@ -112,6 +112,25 @@
       </div>
     </div>
   </div>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyDOiCmoUqaqOJYddH8JiDxxHR8QnjZAURc",
+      authDomain: "upright-th21.firebaseapp.com",
+      projectId: "upright-th21",
+      storageBucket: "upright-th21.appspot.com",
+      messagingSenderId: "52564962928",
+      appId: "1:52564962928:web:1724b0fa750a7f04cfceb5",
+      measurementId: "G-EMF7VN18XJ"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
   <script src="../scripts/settings.js"></script>
 </body>
 
